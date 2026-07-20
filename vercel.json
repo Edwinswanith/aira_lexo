@@ -2,7 +2,7 @@
   "crons": [
     {
       "path": "/api/cron/retry-notifications",
-      "schedule": "15 * * * *"
+      "schedule": "15 2 * * *"
     }
   ]
 }
