@@ -1,0 +1,42 @@
+{
+  "name": "aira-website",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "npm run check:content && next build",
+    "start": "next start",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "check:content": "node scripts/check-content.mjs"
+  },
+  "dependencies": {
+    "@fontsource-variable/bricolage-grotesque": "latest",
+    "@fontsource-variable/manrope": "latest",
+    "@fontsource/dm-mono": "latest",
+    "@phosphor-icons/react": "latest",
+    "@supabase/supabase-js": "latest",
+    "gray-matter": "latest",
+    "next": "latest",
+    "next-mdx-remote": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "resend": "latest",
+    "zod": "latest"
+  },
+  "devDependencies": {
+    "@playwright/test": "latest",
+    "@tailwindcss/postcss": "latest",
+    "@testing-library/jest-dom": "latest",
+    "@testing-library/react": "latest",
+    "@types/node": "latest",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "jsdom": "latest",
+    "tailwindcss": "latest",
+    "typescript": "^5.9.3",
+    "vitest": "latest"
+  }
+}

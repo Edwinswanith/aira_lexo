@@ -1,0 +1,13 @@
+node_modules/
+.next/
+.npm-cache/
+.env.local
+*.tsbuildinfo
+test-results/
+playwright-report/
+tmp/
+design/qa/routes/
+design/qa/implementation-full.png
+design/qa/lighthouse-home.json
+design/qa/product-full-desktop.png
+design/qa/product-full-mobile.png
