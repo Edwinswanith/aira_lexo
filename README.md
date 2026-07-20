@@ -29,6 +29,7 @@ The scheduled Vercel job retries notification failures and deletes application r
 ## Quality checks
 
 - `npm run check:content` fails if a public source file contains an em dash character.
+- `npm run check:seo` validates Insight metadata, dates, slugs, sources, and publication review requirements.
 - `npm run typecheck` checks strict TypeScript.
 - `npm test` runs unit tests.
 - `npm run test:e2e` runs desktop and mobile browser tests.
@@ -63,3 +64,14 @@ The scheduled Vercel job retries notification failures and deletes application r
 10. Submit the sitemap, enable IndexNow, and configure uptime checks for the homepage and pilot API.
 
 Preview deployments receive a `noindex, nofollow` response header. Production indexing should be enabled only after final content, legal, clinical, accessibility, and domain checks pass.
+
+## SEO and agent visibility
+
+- Canonical URLs use `https://airalexo.in` and English India language metadata.
+- Server-rendered pages include WebSite, Organization, WebPage, BreadcrumbList, FAQPage, ItemList, and Article structured data where relevant.
+- Production `robots.txt` allows Googlebot, Bingbot, ChatGPT-User, and OAI-SearchBot. GPTBot remains disallowed because search discovery and model training are separate choices.
+- Draft Insights stay out of production pages and the sitemap.
+- Health-related Insights require a named reviewer, review date, and at least one source before publication.
+- Preview deployments are blocked from indexing through metadata and `robots.txt`.
+
+Set `GOOGLE_SITE_VERIFICATION` and `BING_SITE_VERIFICATION` in the Vercel production environment after creating the respective webmaster properties. Then submit `https://airalexo.in/sitemap.xml` in both tools. IndexNow setup requires a separate public key file and webmaster verification before changed URLs can be submitted.

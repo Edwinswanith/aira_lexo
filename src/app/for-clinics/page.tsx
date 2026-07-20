@@ -1,7 +1,7 @@
 import { FeatureRows, PageHero, PilotCta } from "@/components/page-sections";
 import { pageMetadata } from "@/lib/site";
 
-export const metadata = pageMetadata("For Clinics", "Understand Aira's proposed onboarding, access, deployment, export, and clinic pilot support.", "/for-clinics");
+export const metadata = pageMetadata("Clinical documentation workflow for clinics", "Understand Aira's proposed clinical documentation workflow, onboarding, access controls, deployment support, and pilot measurement.", "/for-clinics");
 
 export default function ClinicsPage() {
   return (

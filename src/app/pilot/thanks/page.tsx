@@ -1,7 +1,10 @@
 import Link from "next/link";
 import { pageMetadata } from "@/lib/site";
 
-export const metadata = pageMetadata("Application received", "Thank you for your interest in the Aira clinical pilot.", "/pilot/thanks");
+export const metadata = {
+  ...pageMetadata("Application received", "Thank you for your interest in the Aira clinical pilot.", "/pilot/thanks"),
+  robots: { index: false, follow: false },
+};
 
 export default async function PilotThanksPage({ searchParams }: { searchParams: Promise<{ status?: string }> }) {
   const { status } = await searchParams;

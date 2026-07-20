@@ -2,7 +2,7 @@ import Link from "next/link";
 import { FeatureRows, PageHero, PilotCta } from "@/components/page-sections";
 import { pageMetadata } from "@/lib/site";
 
-export const metadata = pageMetadata("Trust", "Aira's pilot-stage approach to consent, privacy, security, access, retention, deletion, auditability, and doctor approval.", "/trust");
+export const metadata = pageMetadata("Consent, privacy and doctor control", "Read Aira's pilot-stage approach to consultation consent, privacy, access, retention, deletion, auditability, and doctor approval.", "/trust");
 
 export default function TrustPage() {
   return (

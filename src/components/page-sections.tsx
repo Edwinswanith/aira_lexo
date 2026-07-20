@@ -1,11 +1,26 @@
 import Link from "next/link";
 import { JsonLd } from "./json-ld";
-import { breadcrumbJsonLd } from "@/lib/site";
+import { breadcrumbJsonLd, webPageJsonLd } from "@/lib/site";
 
-export function PageHero({ eyebrow, title, description, path }: { eyebrow: string; title: string; description: string; path: string }) {
+export function PageHero({
+  eyebrow,
+  title,
+  description,
+  path,
+  schemaType = "WebPage",
+}: {
+  eyebrow: string;
+  title: string;
+  description: string;
+  path: string;
+  schemaType?: "WebPage" | "AboutPage" | "CollectionPage";
+}) {
   return (
     <section className="page-hero">
-      <JsonLd data={breadcrumbJsonLd([{ name: "Home", path: "/" }, { name: eyebrow, path }])} />
+      <JsonLd data={[
+        breadcrumbJsonLd([{ name: "Home", path: "/" }, { name: eyebrow, path }]),
+        webPageJsonLd({ title, description, path, type: schemaType }),
+      ]} />
       <div className="container">
         <p className="eyebrow">{eyebrow}</p>
         <h1>{title}</h1>

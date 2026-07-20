@@ -1,7 +1,7 @@
 import { PageHero } from "@/components/page-sections";
 import { pageMetadata } from "@/lib/site";
 
-export const metadata = pageMetadata("Privacy", "How Aira Lexo Solutions Private Limited handles website visits and clinical pilot applications.", "/privacy");
+export const metadata = pageMetadata("Website and pilot application privacy", "How Aira Lexo Solutions Private Limited handles website visits, analytics, clinical pilot applications, retention, and deletion requests.", "/privacy");
 
 export default function PrivacyPage() {
   return (

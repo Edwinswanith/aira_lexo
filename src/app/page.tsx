@@ -1,11 +1,15 @@
 import Image from "next/image";
 import Link from "next/link";
 import { DeviceStateSimulator, PerspectiveSwitcher, TrustStrip } from "@/components/interactions";
-import { pageMetadata } from "@/lib/site";
+import { JsonLd } from "@/components/json-ld";
+import { pageMetadata, site, webPageJsonLd } from "@/lib/site";
+
+const homeTitle = "AI consultation memory for doctors in India";
+const homeDescription = "Aira is a doctor-controlled AI consultation memory system for consent-first capture, structured draft review, and approved context at return visits.";
 
 export const metadata = pageMetadata(
-  "Consultation memory for doctors",
-  "Aira helps doctors capture consultations with consent, review structured draft records, and recover approved context when patients return.",
+  homeTitle,
+  homeDescription,
   "/",
 );
 
@@ -34,9 +38,43 @@ const trustPrinciples = [
   ["Doctor approval", "A structured draft is not the final clinical record until the doctor reviews it."],
 ];
 
+const faqs = [
+  {
+    question: "Does Aira diagnose or prescribe?",
+    answer: "No. Aira is designed to support consultation capture, structured drafting, doctor review, and later retrieval. Diagnosis, prescribing, and treatment decisions remain with the doctor.",
+  },
+  {
+    question: "Does a patient have to agree to recording?",
+    answer: "Yes. The intended workflow starts with a clear explanation and patient consent. A patient can decline without losing access to the consultation.",
+  },
+  {
+    question: "Is the product available today?",
+    answer: "Aira is at the prototype and pilot preparation stage. Product renders and described capabilities are concepts until they are validated in the pilot.",
+  },
+  {
+    question: "What will the pilot measure?",
+    answer: "The pilot is intended to examine workflow fit, consent clarity, review effort, record usefulness, and safe use in real clinical settings. Final measures will be agreed with participating clinicians.",
+  },
+] as const;
+
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "@id": `${site.url}/#frequently-asked-questions`,
+  mainEntity: faqs.map(({ question, answer }) => ({
+    "@type": "Question",
+    name: question,
+    acceptedAnswer: { "@type": "Answer", text: answer },
+  })),
+};
+
 export default function Home() {
   return (
     <main id="main-content">
+      <JsonLd data={[
+        webPageJsonLd({ title: homeTitle, description: homeDescription, path: "/", includeBreadcrumb: false }),
+        faqJsonLd,
+      ]} />
       <section className="container hero">
         <div className="hero-copy">
           <p className="eyebrow">Consultation memory for doctors</p>
@@ -56,6 +94,19 @@ export default function Home() {
       </section>
 
       <TrustStrip />
+
+      <section className="section-tight">
+        <div className="container split">
+          <div>
+            <p className="eyebrow">What is Aira?</p>
+            <h2>A doctor-controlled AI consultation memory system.</h2>
+          </div>
+          <div>
+            <p className="lead">Aira is a pilot-stage system for doctors and clinics. With patient consent, the intended workflow captures a consultation, prepares a structured draft, and lets the doctor review, correct, and approve it before the context is reused.</p>
+            <p>Aira does not diagnose, prescribe, or replace clinical judgment. Product capabilities described on this website remain subject to pilot validation, legal review, and clinical review.</p>
+          </div>
+        </div>
+      </section>
 
       <section className="section">
         <div className="container">
@@ -193,10 +244,7 @@ export default function Home() {
         <div className="container">
           <div className="section-heading" style={{ marginInline: "auto", textAlign: "center" }}><p className="eyebrow">Frequently asked</p><h2>Clear answers before the first recording.</h2></div>
           <div className="faq-list">
-            <details><summary>Does Aira diagnose or prescribe?</summary><p>No. Aira is designed to support consultation capture, structured drafting, doctor review, and later retrieval. Diagnosis, prescribing, and treatment decisions remain with the doctor.</p></details>
-            <details><summary>Does a patient have to agree to recording?</summary><p>Yes. The intended workflow starts with a clear explanation and patient consent. A patient can decline without losing access to the consultation.</p></details>
-            <details><summary>Is the product available today?</summary><p>Aira is at the prototype and pilot preparation stage. Product renders and described capabilities are concepts until they are validated in the pilot.</p></details>
-            <details><summary>What will the pilot measure?</summary><p>The pilot is intended to examine workflow fit, consent clarity, review effort, record usefulness, and safe use in real clinical settings. Final measures will be agreed with participating clinicians.</p></details>
+            {faqs.map(({ question, answer }) => <details key={question}><summary>{question}</summary><p>{answer}</p></details>)}
           </div>
         </div>
       </section>

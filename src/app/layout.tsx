@@ -3,8 +3,11 @@ import Script from "next/script";
 import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
 import { JsonLd } from "@/components/json-ld";
-import { site } from "@/lib/site";
+import { isIndexableDeployment, site } from "@/lib/site";
 import "./globals.css";
+
+const googleVerification = process.env.GOOGLE_SITE_VERIFICATION;
+const bingVerification = process.env.BING_SITE_VERIFICATION;
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
@@ -17,26 +20,60 @@ export const metadata: Metadata = {
     icon: "/images/aira-logo-mark-256.png",
     apple: "/images/aira-logo-mark-256.png",
   },
-  robots: { index: true, follow: true },
+  robots: isIndexableDeployment
+    ? {
+        index: true,
+        follow: true,
+        googleBot: {
+          index: true,
+          follow: true,
+          "max-image-preview": "large",
+          "max-snippet": -1,
+          "max-video-preview": -1,
+        },
+      }
+    : { index: false, follow: false },
+  verification: googleVerification || bingVerification
+    ? {
+        google: googleVerification,
+        other: bingVerification ? { "msvalidate.01": bingVerification } : undefined,
+      }
+    : undefined,
 };
 
 const websiteJsonLd = {
   "@context": "https://schema.org",
   "@type": "WebSite",
+  "@id": site.websiteId,
   name: site.name,
-  alternateName: "Aira Lexo",
+  alternateName: site.alternateName,
   url: site.url,
-  inLanguage: "en-IN",
+  description: site.description,
+  inLanguage: site.language,
+  publisher: { "@id": site.organizationId },
 };
 
 const organizationJsonLd = {
   "@context": "https://schema.org",
   "@type": "Organization",
+  "@id": site.organizationId,
   name: site.name,
-  alternateName: "Aira Lexo",
+  alternateName: site.alternateName,
   legalName: site.legalName,
   url: site.url,
-  logo: `${site.url}/images/aira-logo-mark.png`,
+  description: site.description,
+  logo: {
+    "@type": "ImageObject",
+    url: site.logoUrl,
+    contentUrl: site.logoUrl,
+    caption: "Aira logo",
+  },
+  areaServed: site.pilotCities.map((name) => ({
+    "@type": "City",
+    name,
+    containedInPlace: { "@type": "Country", name: "India" },
+  })),
+  knowsAbout: site.topics,
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

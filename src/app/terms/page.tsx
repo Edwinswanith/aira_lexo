@@ -1,7 +1,7 @@
 import { PageHero } from "@/components/page-sections";
 import { pageMetadata } from "@/lib/site";
 
-export const metadata = pageMetadata("Terms", "Terms for the Aira public website and clinical pilot application.", "/terms");
+export const metadata = pageMetadata("Website and pilot application terms", "Terms for using the Aira public website, reading prototype-stage product information, and submitting a clinical pilot application.", "/terms");
 
 export default function TermsPage() {
   return (

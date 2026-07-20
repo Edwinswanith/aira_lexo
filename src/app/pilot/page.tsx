@@ -2,7 +2,7 @@ import { PilotApplicationForm } from "@/components/pilot-form";
 import { PageHero } from "@/components/page-sections";
 import { pageMetadata } from "@/lib/site";
 
-export const metadata = pageMetadata("Join the Clinical Pilot", "Apply for the Aira clinical pilot in Chennai, Bengaluru, Hyderabad, Mumbai, or Coimbatore.", "/pilot");
+export const metadata = pageMetadata("Clinical documentation pilot for doctors and clinics", "Apply for the Aira clinical documentation pilot in Chennai, Bengaluru, Hyderabad, Mumbai, or Coimbatore.", "/pilot");
 
 export default function PilotPage() {
   return (

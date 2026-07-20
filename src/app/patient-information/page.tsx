@@ -1,7 +1,7 @@
 import { PageHero } from "@/components/page-sections";
 import { pageMetadata } from "@/lib/site";
 
-export const metadata = pageMetadata("Patient Information", "Plain-language information about the intended Aira consultation recording workflow, consent, access, refusal, and data rights.", "/patient-information");
+export const metadata = pageMetadata("Consultation recording and patient consent", "Plain-language information about Aira's intended consultation recording workflow, patient consent, refusal, access, and data rights.", "/patient-information");
 
 export default function PatientInformationPage() {
   return (

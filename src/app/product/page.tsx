@@ -3,7 +3,7 @@ import { FeatureRows, PageHero, PilotCta } from "@/components/page-sections";
 import { PrototypeGallery } from "@/components/prototype-gallery";
 import { pageMetadata } from "@/lib/site";
 
-export const metadata = pageMetadata("Product", "Explore Aira's concept recorder, review app, structured record, and return-visit workflow.", "/product");
+export const metadata = pageMetadata("Consultation recorder and review workflow", "Explore Aira's pilot-stage recorder, doctor review app, structured consultation draft, and return-visit context workflow.", "/product");
 
 const device: Array<[string, string, string]> = [
   ["01", "One-button operation", "A simple physical control is intended to make the beginning and end of capture unmistakable."],

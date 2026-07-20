@@ -1,7 +1,7 @@
 import { FeatureRows, PageHero, PilotCta } from "@/components/page-sections";
 import { pageMetadata } from "@/lib/site";
 
-export const metadata = pageMetadata("For Doctors", "See how Aira is designed to support attention, documentation, repeat visits, and doctor control.", "/for-doctors");
+export const metadata = pageMetadata("Consultation memory for doctors", "See how Aira is designed to support consent-first capture, structured draft review, repeat visits, and doctor control.", "/for-doctors");
 
 export default function DoctorsPage() {
   return (
