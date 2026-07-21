@@ -28,7 +28,7 @@ export function Header() {
         <nav className="desktop-nav" aria-label="Primary navigation">
           {nav.map(([label, href]) => <Link href={href} key={href} prefetch={false}>{label}</Link>)}
         </nav>
-        <Link className="button button-violet header-cta" href="/pilot" prefetch={false}>Join the Pilot</Link>
+        <Link className="button button-violet header-cta" href="/pilot" prefetch={false}>Join the Clinical Pilot</Link>
         <button
           className="menu-button"
           type="button"

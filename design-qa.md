@@ -1,60 +1,48 @@
-# Aira design QA
+# Aira Homepage Design QA
 
-## Comparison targets
+## Comparison target
 
-- Selected visual direction: Warm Instrument
-- Primary source visual: `design/reference/warm-instrument.png`
-- Supplied prototype source: `public/images/prototype/prototype-recording.jpeg`
-- Full-view comparison: `design/qa/warm-instrument-logo-comparison.png`
-- Focused prototype comparison: `design/qa/prototype-source-comparison.png`
-- Desktop implementation screenshot: `design/qa/product-prototype-desktop.png`
-- Mobile implementation screenshots: `design/qa/product-prototype-mobile.png` and `design/qa/product-prototype-mobile-gallery.png`
-- Footer logo screenshot: `design/qa/footer-logo-desktop.png`
-- Desktop viewport: 1440 by 900
+- Source visual truth: `artifacts/design-reference/aira-homepage-option-1.png`
+- Final desktop implementation: `artifacts/design-qa-option-1/implementation-desktop-final.jpg`
+- Final mobile implementation: `artifacts/design-qa-option-1/implementation-mobile-final.jpg`
+- Full-view comparison: `artifacts/design-qa-option-1/comparison-desktop-final.png`
+- Desktop viewport: 1440 by 1024
 - Mobile viewport: 390 by 844
-- State: Product page at `#working-prototype`, with all six prototype photographs loaded
+- State: homepage, default interaction state, light theme
 
 ## Findings
 
 No actionable P0, P1, or P2 differences remain.
 
-- Fonts and typography: The new section keeps the existing Bricolage Grotesque display hierarchy, Manrope body copy, and DM Mono style cues. The headline scale and wrapping match the Warm Instrument editorial rhythm on desktop and mobile.
-- Spacing and layout rhythm: The two-column introduction and asymmetric image grid follow the established 12-column composition. On mobile, the section resolves to one column with no horizontal overflow or clipped copy.
-- Colors and visual tokens: Warm porcelain, Eclipse Ink, Ion Violet, and Vital Mint remain consistent with the selected direction. The prototype notice uses the existing mint trust treatment.
-- Image quality and asset fidelity: The supplied photographs remain unaltered source assets. Their crops keep the device screen, physical controls, USB-C access, and enclosure details visible. The generated logo has a valid alpha channel and no visible chroma-key fringe at its website sizes.
-- Copy and content: The section identifies the hardware as an early working prototype, explains that Neura was a temporary name, and does not describe the prototype interface or enclosure as final.
+- Fonts and typography: The implementation uses the existing self-hosted Bricolage Grotesque, Manrope, and DM Mono families. Display scale, line breaks, paragraph measure, navigation weight, and micro-label treatment match the selected design closely.
+- Spacing and layout rhythm: The header, editorial hero grid, full-height image treatment, CTA grouping, divider, trust row, and concept note follow the selected proportions. The product image reaches the right edge and fills the hero vertically.
+- Colors and visual tokens: Eclipse Ink, Warm Porcelain, Ion Violet, Vital Mint, Slate Copy, border opacity, and surface balance remain consistent with the selected design and the existing Aira system.
+- Image quality and asset fidelity: The implementation uses the real Aira logo asset and the existing production hero render. It does not replace visible assets with CSS drawings, placeholder shapes, or custom SVG artwork.
+- Copy and content: The headline, CTA labels, doctor-control boundaries, and concept disclaimer match the approved direction. No unsupported medical, accuracy, compliance, or performance claims were introduced.
+- Accessibility and responsiveness: The heading remains semantic, the product image has meaningful alternative text, controls retain focus styles, and reduced-motion behavior remains available. At 390 pixels, the page has no horizontal overflow. The mobile menu opens and closes, and the primary pilot CTA reaches the pilot application.
+- Browser quality: No console errors were present during the final mobile capture.
 
-## Full-view comparison evidence
+## Focused comparison
 
-`design/qa/warm-instrument-logo-comparison.png` places the selected homepage direction and the current 1440 by 900 homepage implementation together. The new symbol changes the text-only brand lockup intentionally while preserving header height, navigation spacing, headline hierarchy, product scale, and warm editorial balance.
-
-## Focused comparison evidence
-
-`design/qa/prototype-source-comparison.png` places the supplied recording-state photograph and the implemented prototype section together. The image remains truthful to the source, with no retouching or relabeling. The section provides enough surrounding context to distinguish the early build from the current concept render and the Aira public brand.
-
-## Responsive and interaction review
-
-- Header logo is 32 px on desktop and mobile and remains paired with the Aira wordmark.
-- Footer logo uses a porcelain backing so the ink portion remains visible on the dark footer.
-- Six prototype photographs are visible at both reviewed viewports.
-- The homepage “See the working prototype” link lands at `/product#working-prototype`.
-- The mobile menu opens, exposes six links, and closes correctly.
-- Desktop and mobile document widths match their viewports, with no horizontal overflow.
-- Browser console was checked. There were zero errors. Two development-only Next.js warnings were observed for smooth scrolling and a local LCP heuristic.
+A separate crop was not required. The combined 2880 by 1024 comparison preserves the header, hero copy, CTA labels, trust icons, product render, and concept note at readable size. These were also inspected in the individual full-resolution source and implementation files.
 
 ## Comparison history
 
-The first combined comparison found no P0, P1, or P2 mismatch. No visual correction loop was required. Residual P3 polish can be considered after real device photography is captured in controlled lighting.
+1. Pass 1 found a P1 image-layout mismatch and a P2 headline-wrap mismatch. The image was inset instead of full height, and the third headline line broke too early.
+2. Pass 2 made the product image full height and flush right. The headline became too wide and used only three lines.
+3. Pass 3 restored a four-line headline, anchored the concept note near the bottom, and aligned the trust row with the reference. The exact third-line break still differed.
+4. Pass 4 added deliberate desktop title breaks. The composition matched, but the header and action targets remained smaller than the selected design.
+5. Final pass increased desktop masthead and action scale while preserving the compact mobile header. The side-by-side comparison found no actionable P0, P1, or P2 differences.
 
-## Technical verification
+## Follow-up polish
 
-- Production build passed.
-- Strict TypeScript passed.
-- Four unit tests passed.
-- Content scan found zero em dash characters.
-- Logo alpha validation passed at 1254 px and 256 px.
-- In-app browser review passed at 1440 by 900 and 390 by 844.
+- P3: The first two trust labels use slightly fewer line breaks than the generated reference at some desktop widths. Their meaning, hierarchy, and alignment remain intact.
 
-## Result
+## Verification
+
+- Primary interactions tested: mobile navigation open and close, homepage pilot CTA, and pilot page arrival.
+- Responsive check: 390 by 844 with zero horizontal overflow.
+- Console errors checked: none found.
+- Full-view and mobile screenshots captured from the local production build.
 
 final result: passed

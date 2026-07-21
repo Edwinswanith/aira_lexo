@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { ArrowRight } from "@phosphor-icons/react/dist/ssr";
 import { DeviceStateSimulator, PerspectiveSwitcher, TrustStrip } from "@/components/interactions";
 import { JsonLd } from "@/components/json-ld";
 import { pageMetadata, site, webPageJsonLd } from "@/lib/site";
@@ -78,12 +79,13 @@ export default function Home() {
       <section className="container hero">
         <div className="hero-copy">
           <p className="eyebrow">Consultation memory for doctors</p>
-          <h1>Your consultation memory, ready when the patient returns.</h1>
-          <p className="lead">Aira captures a consultation with consent, prepares a structured draft for doctor review, and brings the approved context back at the next visit.</p>
+          <h1>Your consultation<br className="hero-title-break" />{" "}memory, ready<br className="hero-title-break" />{" "}when the patient<br className="hero-title-break" />{" "}returns.</h1>
+          <p className="lead hero-lead">Capture with consent. Review every draft.<br className="hero-line-break" /> Bring approved context back when the patient returns.</p>
           <div className="button-row">
             <Link className="button button-violet plausible-event-name=pilot_cta_click" href="/pilot" prefetch={false}>Join the Clinical Pilot</Link>
-            <Link className="button button-secondary" href="#how-it-works" prefetch={false}>See How Aira Works</Link>
+            <Link className="hero-text-link" href="#how-it-works" prefetch={false}>See how Aira works <ArrowRight size={18} aria-hidden="true" /></Link>
           </div>
+          <TrustStrip />
           <p className="concept-note">Concept render. Final product may vary.</p>
         </div>
         <div className="hero-visual">
@@ -92,8 +94,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
-      <TrustStrip />
 
       <section className="section-tight">
         <div className="container split">

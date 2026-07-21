@@ -1,6 +1,6 @@
 "use client";
 
-import { CheckCircle, HandTap, ShieldCheck } from "@phosphor-icons/react";
+import { CheckCircle, ShieldCheck, UserCheck } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
 
 function track(name: string) {
@@ -19,22 +19,19 @@ const states = {
 
 export function TrustStrip() {
   return (
-    <div className="trust-strip">
-      <div className="container trust-strip-grid">
+    <div className="trust-strip" aria-label="Aira product boundaries">
+      <div className="trust-strip-grid">
         <div className="trust-strip-item">
-          <div className="trust-step-heading"><span>01</span><strong>Consent-first capture</strong></div>
-          <span className="icon-disc"><HandTap size={20} /></span>
-          <p>Recording starts only after clear patient consent.</p>
+          <span className="icon-disc"><CheckCircle size={22} /></span>
+          <strong>Consent-first capture</strong>
         </div>
         <div className="trust-strip-item">
-          <div className="trust-step-heading"><span>02</span><strong>Doctor-reviewed records</strong></div>
-          <span className="icon-disc"><CheckCircle size={20} /></span>
-          <p>The doctor reviews and approves each structured draft.</p>
+          <span className="icon-disc"><UserCheck size={22} /></span>
+          <strong>Doctor-reviewed records</strong>
         </div>
         <div className="trust-strip-item">
-          <div className="trust-step-heading"><span>03</span><strong>Clinical boundaries</strong></div>
-          <span className="icon-disc"><ShieldCheck size={20} /></span>
-          <p>No autonomous diagnosis or prescribing.</p>
+          <span className="icon-disc"><ShieldCheck size={22} /></span>
+          <strong>No autonomous diagnosis or prescribing</strong>
         </div>
       </div>
     </div>
