@@ -8,8 +8,7 @@ export default function robots(): MetadataRoute.Robots {
 
   return {
     rules: [
-      { userAgent: ["Googlebot", "Bingbot", "ChatGPT-User", "OAI-SearchBot"], allow: "/", disallow: "/api/" },
-      { userAgent: "GPTBot", disallow: "/" },
+      { userAgent: ["Googlebot", "Bingbot", "ChatGPT-User", "OAI-SearchBot", "GPTBot"], allow: "/", disallow: "/api/" },
       { userAgent: "*", allow: "/", disallow: ["/api/"] },
     ],
     sitemap: absoluteUrl("/sitemap.xml"),
