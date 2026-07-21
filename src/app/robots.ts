@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { isIndexableDeployment, site } from "@/lib/site";
+import { absoluteUrl, isIndexableDeployment, site } from "@/lib/site";
 
 export default function robots(): MetadataRoute.Robots {
   if (!isIndexableDeployment) {
@@ -12,7 +12,7 @@ export default function robots(): MetadataRoute.Robots {
       { userAgent: "GPTBot", disallow: "/" },
       { userAgent: "*", allow: "/", disallow: ["/api/"] },
     ],
-    sitemap: `${site.url}/sitemap.xml`,
+    sitemap: absoluteUrl("/sitemap.xml"),
     host: site.url,
   };
 }

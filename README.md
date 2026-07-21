@@ -70,6 +70,7 @@ Preview deployments receive a `noindex, nofollow` response header. Production in
 - Canonical URLs use `https://airalexo.in` and English India language metadata.
 - Server-rendered pages include WebSite, Organization, WebPage, BreadcrumbList, FAQPage, ItemList, and Article structured data where relevant.
 - Production `robots.txt` allows Googlebot, Bingbot, ChatGPT-User, and OAI-SearchBot. GPTBot remains disallowed because search discovery and model training are separate choices.
+- `/llms.txt` provides a concise Markdown guide to canonical product, trust, pilot, policy, and published Insight pages. It is generated from production content and excludes drafts.
 - Draft Insights stay out of production pages and the sitemap.
 - Health-related Insights require a named reviewer, review date, and at least one source before publication.
 - Preview deployments are blocked from indexing through metadata and `robots.txt`.
