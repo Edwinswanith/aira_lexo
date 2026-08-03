@@ -65,12 +65,6 @@ export default function FoundersPage() {
             <p className="lead">The team combines direct clinical discovery, product design, and technical delivery. These are the people responsible for how Aira is researched, designed, built, and prepared for pilot use.</p>
           </div>
 
-          <div className="founder-facts" aria-label="Company transparency facts">
-            <div><span>Public brand</span><strong>{site.name}</strong></div>
-            <div><span>Legal entity</span><strong>{site.legalName}</strong></div>
-            <div><span>Roles reviewed</span><strong>3 August 2026</strong></div>
-          </div>
-
           <div className="founder-grid">
             {founders.map((founder, index) => (
               <article className="founder-card" id={founder.slug} key={founder.slug}>

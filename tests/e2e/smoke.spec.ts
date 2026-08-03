@@ -29,6 +29,7 @@ test("founders page exposes accountable roles and public profile links", async (
   await page.goto("/founders", { waitUntil: "domcontentloaded" });
   await expect(page.getByRole("heading", { name: "Meet the people accountable for Aira." })).toBeVisible();
   await expect(page.locator(".founder-card")).toHaveCount(3);
+  await expect(page.locator(".founder-facts")).toHaveCount(0);
   await expect(page.getByRole("heading", { name: "Dr. Pon Shamli Duraisamy" })).toHaveCount(2);
   await expect(page.getByText("Advanced Ozone Therapy Practitioner", { exact: false })).toHaveCount(3);
   await expect(page.getByRole("link", { name: /Edwin Swanith's public LinkedIn profile/ })).toHaveAttribute("href", "https://www.linkedin.com/in/edwinswanith/");
