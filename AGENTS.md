@@ -11,6 +11,7 @@ When implementing from a selected generated mock, treat that image as the source
 - The selected visual direction is Warm Instrument.
 - The source of truth is `design/reference/warm-instrument.png`.
 - Use Aira as the public brand and Aira Lexo Solutions Private Limited as the legal entity.
+- Keep the Founders page focused on people, responsibilities, biographies, and third-party profile verification. Do not show a public-brand, legal-entity, or role-review-date facts strip on that page.
 - Use warm porcelain, dark editorial typography, restrained violet, mint, and coral accents.
 - All product imagery must be marked as a concept render.
 - Public content must not contain an em dash character.
