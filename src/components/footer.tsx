@@ -26,6 +26,7 @@ export function Footer() {
           <nav className="footer-links" aria-label="Company and legal links">
             <strong>Company</strong>
             <Link href="/about">About</Link>
+            <Link href="/founders">Founders</Link>
             <Link href="/patient-information">Patient Information</Link>
             <Link href="/pilot">Join the Pilot</Link>
             <Link href="/privacy">Privacy</Link>

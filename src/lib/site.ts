@@ -2,6 +2,36 @@ import type { Metadata } from "next";
 
 const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || "https://airalexo.in").replace(/\/$/, "");
 
+export const founders = [
+  {
+    slug: "edwin-swanith",
+    name: "Edwin Swanith",
+    role: "Co-founder",
+    area: "Technology & Integrations",
+    bio: "Edwin leads Aira's technical architecture, product engineering, and integrations. He is responsible for connecting the recorder, review workflow, and supporting systems into a dependable end-to-end product.",
+    imagePath: "/images/founders/edwin-swanith.webp",
+    linkedInUrl: "https://www.linkedin.com/in/edwinswanith/",
+  },
+  {
+    slug: "dr-pon-shamli-duraisamy",
+    name: "Dr. Pon Shamli Duraisamy",
+    role: "Co-founder & Director",
+    area: "Clinical Research & Operations",
+    bio: "Dr. Shamli is a BNYS physician, Yoga and Naturopathy Doctor, and Advanced Ozone Therapy Practitioner with over seven years of clinical and wellness experience. At Aira, she leads clinical research and operations, working directly with doctors to turn feedback into responsible product decisions.",
+    imagePath: "/images/founders/dr-pon-shamli-duraisamy.webp",
+    linkedInUrl: "https://www.linkedin.com/in/dr-pon-shamli-duraisamy-806499280/",
+  },
+  {
+    slug: "raghul-senthilnathan",
+    name: "Raghul Senthilnathan",
+    role: "Co-founder",
+    area: "Product & Design",
+    bio: "Raghul leads product design and experience across Aira. Based in the UK, he brings founder experience from Cogniverse Limited and translates clinical and technical requirements into clear, usable product experiences.",
+    imagePath: "/images/founders/raghul-senthilnathan.webp",
+    linkedInUrl: "https://www.linkedin.com/in/raghul-snn/",
+  },
+] as const;
+
 export const site = {
   name: "Aira",
   alternateName: "Aira Lexo",

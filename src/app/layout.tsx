@@ -3,7 +3,7 @@ import Script from "next/script";
 import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
 import { JsonLd } from "@/components/json-ld";
-import { isIndexableDeployment, site } from "@/lib/site";
+import { absoluteUrl, founders, isIndexableDeployment, site } from "@/lib/site";
 import "./globals.css";
 
 const googleVerification = process.env.GOOGLE_SITE_VERIFICATION;
@@ -74,6 +74,14 @@ const organizationJsonLd = {
     containedInPlace: { "@type": "Country", name: "India" },
   })),
   knowsAbout: site.topics,
+  founder: founders.map((founder) => ({
+    "@type": "Person",
+    "@id": `${site.url}/founders#${founder.slug}`,
+    name: founder.name,
+    jobTitle: `${founder.role}, ${founder.area}`,
+    image: absoluteUrl(founder.imagePath),
+    sameAs: [founder.linkedInUrl],
+  })),
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
