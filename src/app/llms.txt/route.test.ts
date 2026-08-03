@@ -9,6 +9,7 @@ describe("llms.txt", () => {
     expect(response.headers.get("content-type")).toBe("text/plain; charset=utf-8");
     expect(content).toContain("# Aira");
     expect(content).toContain("https://airalexo.in/product");
+    expect(content).toContain("https://airalexo.in/founders");
     expect(content).toContain("how-we-are-building-the-aira-pilot");
   });
 

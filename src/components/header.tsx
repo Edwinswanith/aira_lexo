@@ -11,6 +11,7 @@ const nav = [
   ["For Clinics", "/for-clinics"],
   ["Trust", "/trust"],
   ["Insights", "/insights"],
+  ["Founders", "/founders"],
 ];
 
 export function Header() {

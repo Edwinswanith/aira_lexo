@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { PageHero, PilotCta } from "@/components/page-sections";
 import { pageMetadata, site } from "@/lib/site";
 
@@ -21,6 +22,7 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
+      <section className="section-tight"><div className="container split"><div><p className="eyebrow">Who builds Aira</p><h2>Named people. Clear responsibilities.</h2></div><div><p className="lead">Meet the three founders responsible for clinical research and operations, product design, and technical delivery. Each profile includes a direct public LinkedIn link.</p><div className="button-row"><Link className="button button-secondary" href="/founders">Meet the founders</Link></div></div></div></section>
       <section className="section dark-section"><div className="container"><div className="section-heading"><p className="eyebrow" style={{ color: "var(--mint)" }}>How we plan to learn</p><h2>Build with clinicians. Validate before claiming.</h2></div><div className="card-grid"><article className="card" style={{ background: "#101d2b", borderColor: "rgba(255,255,255,.12)" }}><h3>Clinical input</h3><p>Doctors and clinic teams help define useful records, safe boundaries, and real workflow constraints.</p></article><article className="card" style={{ background: "#101d2b", borderColor: "rgba(255,255,255,.12)" }}><h3>Pilot evidence</h3><p>We separate what the category suggests from what Aira itself has actually demonstrated.</p></article><article className="card" style={{ background: "#101d2b", borderColor: "rgba(255,255,255,.12)" }}><h3>Transparent progress</h3><p>When evidence changes, we update public content with dates, sources, and named reviewers where clinical review is needed.</p></article></div></div></section>
       <PilotCta />
     </main>

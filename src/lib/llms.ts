@@ -34,6 +34,7 @@ export function buildLlmsText(insights: PublicInsight[]) {
     markdownLink("Patient Information", "/patient-information", "A plain-language explanation of consultation recording, patient choice, access, and data rights."),
     markdownLink("Clinical Pilot", "/pilot", "Pilot eligibility, supported cities, expected participation, and the application form."),
     markdownLink("About Aira", "/about", "The public brand, legal entity, product stage, scope, and company approach."),
+    markdownLink("Founders", "/founders", "Named founders, operating responsibilities, professional portraits, and direct public LinkedIn profiles."),
     "",
     "## Insights",
     "",
