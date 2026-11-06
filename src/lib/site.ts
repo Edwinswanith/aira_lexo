@@ -35,7 +35,7 @@ export const founders = [
 export const site = {
   name: "Aira",
   alternateName: "Aira Lexo",
-  legalName: "Aira Lexo Solutions Private Limited",
+  legalName: "AiraLexo Solutions Private Limited",
   url: siteUrl,
   locale: "en_IN",
   language: "en-IN",

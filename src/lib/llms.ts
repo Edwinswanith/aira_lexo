@@ -43,8 +43,9 @@ export function buildLlmsText(insights: PublicInsight[]) {
     "",
     "## Policies",
     "",
-    markdownLink("Privacy", "/privacy", "Website data and pilot application privacy information."),
-    markdownLink("Terms", "/terms", "Website and pilot application terms."),
+    markdownLink("Privacy Policy", "/privacy-policy", "AiraLexo, MediScript, website, and WhatsApp integration privacy information."),
+    markdownLink("Terms", "/terms-of-service", "Website and pilot application terms."),
+    markdownLink("Data Deletion", "/data-deletion", "Manual deletion request and WhatsApp disconnection instructions."),
     "",
   ].join("\n");
 }

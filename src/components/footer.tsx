@@ -29,12 +29,13 @@ export function Footer() {
             <Link href="/founders">Founders</Link>
             <Link href="/patient-information">Patient Information</Link>
             <Link href="/pilot">Join the Pilot</Link>
-            <Link href="/privacy">Privacy</Link>
-            <Link href="/terms">Terms</Link>
+            <Link href="/privacy-policy">Privacy Policy</Link>
+            <Link href="/terms-of-service">Terms</Link>
+            <Link href="/data-deletion">Data Deletion</Link>
           </nav>
         </div>
         <div className="footer-bottom">
-          <span>© {new Date().getFullYear()} Aira Lexo Solutions Private Limited</span>
+          <span>© {new Date().getFullYear()} AiraLexo Solutions Private Limited</span>
           <span>Built in India for considered clinical use.</span>
         </div>
       </div>

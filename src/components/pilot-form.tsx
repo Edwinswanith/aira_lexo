@@ -49,7 +49,7 @@ export function PilotApplicationForm() {
       repeatVisitShare: form.get("repeatVisitShare"),
       pilotInterest: form.get("pilotInterest"),
       consentToContact: form.get("consentToContact") === "on",
-      privacyPolicyVersion: "2026-07-20",
+        privacyPolicyVersion: "2026-11-06",
       source: form.get("source") || "website",
       utmSource: params.get("utm_source") || "",
       utmMedium: params.get("utm_medium") || "",

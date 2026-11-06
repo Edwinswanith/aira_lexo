@@ -13,12 +13,14 @@ const routes = [
   { path: "/about", changeFrequency: "monthly", priority: 0.6 },
   { path: "/founders", changeFrequency: "monthly", priority: 0.7 },
   { path: "/insights", changeFrequency: "weekly", priority: 0.8 },
-  { path: "/privacy", changeFrequency: "yearly", priority: 0.3 },
-  { path: "/terms", changeFrequency: "yearly", priority: 0.3 },
+  { path: "/privacy-policy", changeFrequency: "yearly", priority: 0.3 },
+  { path: "/terms-of-service", changeFrequency: "yearly", priority: 0.3 },
+  { path: "/data-deletion", changeFrequency: "yearly", priority: 0.3 },
 ] as const;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const pages = routes.map((route) => ({ url: absoluteUrl(route.path), lastModified: new Date("2026-08-03"), changeFrequency: route.changeFrequency, priority: route.priority }));
+  const legalRoutes = new Set<string>(["/privacy-policy", "/terms-of-service", "/data-deletion"]);
+  const pages = routes.map((route) => ({ url: absoluteUrl(route.path), lastModified: new Date(legalRoutes.has(route.path) ? "2026-11-06" : "2026-08-03"), changeFrequency: route.changeFrequency, priority: route.priority }));
   const insights = (await getAllInsights(false)).map(({ frontmatter }) => ({
     url: absoluteUrl(`/insights/${frontmatter.slug}`),
     lastModified: new Date(frontmatter.updatedAt || frontmatter.publishedAt),
