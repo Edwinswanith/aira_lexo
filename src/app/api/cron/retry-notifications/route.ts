@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { sendPilotNotifications } from "@/lib/notifications";
 import { getDatabase } from "@/lib/mongodb";
+import { expireStaleOrders } from "@/lib/orders";
 import { deleteExpiredApplications, findApplicationsAwaitingRetry, fromStoredApplication, setNotificationStatus } from "@/lib/pilot-store";
 
 export const runtime = "nodejs";
@@ -16,6 +17,7 @@ export async function GET(request: NextRequest) {
     if (!db) return NextResponse.json({ status: "unavailable" }, { status: 500 });
 
     await deleteExpiredApplications(db);
+    const expiredOrders = await expireStaleOrders(db);
     const rows = await findApplicationsAwaitingRetry(db);
 
     let sent = 0;
@@ -26,7 +28,7 @@ export async function GET(request: NextRequest) {
         await setNotificationStatus(db, row._id, "sent");
       }
     }
-    return NextResponse.json({ status: "complete", processed: rows.length, sent });
+    return NextResponse.json({ status: "complete", processed: rows.length, sent, expiredOrders });
   } catch {
     return NextResponse.json({ status: "unavailable" }, { status: 500 });
   }
