@@ -12,8 +12,10 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-export default function CheckoutPage() {
+export default async function CheckoutPage({ searchParams }: { searchParams: Promise<{ qty?: string }> }) {
   if (!isStoreEnabled()) notFound();
+  const requested = Number.parseInt((await searchParams).qty || "1", 10);
+  const initialQuantity = Number.isFinite(requested) ? Math.min(Math.max(requested, 1), product.maxQuantityPerOrder) : 1;
   return (
     <main id="main-content">
       <section className="section checkout-section">
@@ -34,6 +36,7 @@ export default function CheckoutPage() {
             }}
             states={[...indianStates]}
             paymentsReady={isRazorpayConfigured()}
+            initialQuantity={initialQuantity}
           />
         </div>
       </section>

@@ -50,9 +50,9 @@ function loadRazorpay(): Promise<RazorpayConstructor> {
   });
 }
 
-export function CheckoutForm({ product, states, paymentsReady }: { product: CheckoutProduct; states: string[]; paymentsReady: boolean }) {
+export function CheckoutForm({ product, states, paymentsReady, initialQuantity = 1 }: { product: CheckoutProduct; states: string[]; paymentsReady: boolean; initialQuantity?: number }) {
   const router = useRouter();
-  const [quantity, setQuantity] = useState(1);
+  const [quantity, setQuantity] = useState(initialQuantity);
   const [needsInvoice, setNeedsInvoice] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [formError, setFormError] = useState("");

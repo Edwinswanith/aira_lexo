@@ -1,6 +1,8 @@
 import Image from "next/image";
 import { FeatureRows, PageHero, PilotCta } from "@/components/page-sections";
 import { PrototypeGallery } from "@/components/prototype-gallery";
+import Link from "next/link";
+import { isStoreEnabled } from "@/lib/store";
 import { pageMetadata } from "@/lib/site";
 
 export const metadata = pageMetadata("Consultation recorder and review workflow", "Explore Aira's pilot-stage recorder, doctor review app, structured consultation draft, and return-visit context workflow.", "/product");
@@ -26,7 +28,7 @@ export default function ProductPage() {
       </section>
       <section className="section-tight">
         <div className="container split">
-          <div><p className="eyebrow">The recorder</p><h2>Small enough to stay out of the way.</h2><p className="lead">The compact hardware concept uses a matte black body, a small status display, a microphone opening, an illuminated control, and charging contacts. It is a pilot-stage design, not a finished medical device.</p></div>
+          <div><p className="eyebrow">The recorder</p><h2>Small enough to stay out of the way.</h2><p className="lead">The compact hardware concept uses a matte black body, a small status display, a microphone opening, an illuminated control, and charging contacts. It is a pilot-stage design, not a finished medical device.</p>{isStoreEnabled() && <div className="button-row"><Link className="button button-violet" href="/buy">Buy Aira</Link></div>}</div>
           <FeatureRows items={device} />
         </div>
       </section>
