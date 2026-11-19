@@ -19,6 +19,8 @@ const filters: Array<{ value: OrderStatus | "attention" | "all"; label: string }
   { value: "refunded", label: "Refunded" },
 ];
 
+const plural = (count: number, word: string) => `${count} ${word}${count === 1 ? "" : "s"}`;
+
 export default async function AdminOrdersPage({ searchParams }: { searchParams: Promise<{ status?: string; q?: string; message?: string }> }) {
   const { db, admin } = await requireAdmin();
   const params = await searchParams;
@@ -43,9 +45,9 @@ export default async function AdminOrdersPage({ searchParams }: { searchParams: 
       {params.message && <div className="form-status" role="status">{params.message}</div>}
 
       <section className="admin-stats" aria-label="Sales summary">
-        <div><span>Today</span><strong>{formatRupees(summary.today.revenuePaise)}</strong><small>{summary.today.orders} orders</small></div>
-        <div><span>This month</span><strong>{formatRupees(summary.month.revenuePaise)}</strong><small>{summary.month.units} units</small></div>
-        <div><span>All time</span><strong>{formatRupees(summary.allTime.revenuePaise)}</strong><small>{summary.allTime.orders} orders</small></div>
+        <div><span>Today</span><strong>{formatRupees(summary.today.revenuePaise)}</strong><small>{plural(summary.today.orders, "order")}</small></div>
+        <div><span>This month</span><strong>{formatRupees(summary.month.revenuePaise)}</strong><small>{plural(summary.month.units, "unit")}</small></div>
+        <div><span>All time</span><strong>{formatRupees(summary.allTime.revenuePaise)}</strong><small>{plural(summary.allTime.orders, "order")}</small></div>
         <div className={summary.toShip ? "admin-stat-alert" : ""}><span>To ship</span><strong>{summary.toShip}</strong><small>paid or packed</small></div>
         <div className={summary.attention ? "admin-stat-alert" : ""}><span>Needs attention</span><strong>{summary.attention}</strong><small>check these first</small></div>
         <form action={updateStock} className="admin-stock">
