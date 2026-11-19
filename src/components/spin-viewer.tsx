@@ -1,27 +1,34 @@
 "use client";
 
-import { ArrowClockwise, ArrowCounterClockwise, MagnifyingGlassMinus, MagnifyingGlassPlus, X } from "@phosphor-icons/react";
+import { ArrowLeft, ArrowRight, MagnifyingGlassMinus, MagnifyingGlassPlus, X } from "@phosphor-icons/react";
 import { type ReactNode, useCallback, useEffect, useMemo, useRef, useState } from "react";
 
+/**
+ * "spin": a 360 turntable sequence (many frames, dragging turns the product).
+ * "angles": a small set of real photos from different angles (dragging steps
+ * between them, with thumbnails).
+ */
 export type SpinManifest = {
-  placeholder: boolean;
+  mode: "spin" | "angles";
   frameCount: number;
-  pattern: string;
-  hotspots: Array<Record<string, number[] | null>>;
+  frames: string[];
+  thumbs?: string[];
+  alts?: string[];
+  hotspots: Array<Record<string, number[] | null | undefined>>;
 };
 
 export type SpinHotspot = { id: string; title: string; text: string; extra?: ReactNode };
 
-const frameSrc = (pattern: string, index: number) => pattern.replace("{index}", String(index).padStart(2, "0"));
 const mod = (value: number, n: number) => ((value % n) + n) % n;
 
 /**
- * A photo-sequence 360 viewer. Drag or swipe sideways to turn the product,
- * use the arrow keys or buttons, zoom in, and open feature hotspots that
- * follow the product as it turns. Vertical swipes still scroll the page.
+ * Product viewer: drag or swipe sideways to change the view, use the arrow
+ * keys or buttons, zoom in, and open feature hotspots placed on the photos.
+ * Vertical swipes still scroll the page.
  */
 export function SpinViewer({ manifest, hotspots, label }: { manifest: SpinManifest; hotspots: SpinHotspot[]; label: string }) {
   const count = manifest.frameCount;
+  const isSpin = manifest.mode === "spin";
   const [frame, setFrame] = useState(0);
   const [zoom, setZoom] = useState(false);
   const [origin, setOrigin] = useState("50% 50%");
@@ -29,7 +36,7 @@ export function SpinViewer({ manifest, hotspots, label }: { manifest: SpinManife
   const [loaded, setLoaded] = useState<Set<number>>(() => new Set([0]));
   const [interacted, setInteracted] = useState(false);
   const stage = useRef<HTMLDivElement>(null);
-  const drag = useRef<{ x: number; frame: number; lastX: number; lastT: number; velocity: number } | null>(null);
+  const drag = useRef<{ x: number; frame: number; lastX: number; lastT: number; velocity: number; moved: boolean } | null>(null);
   const animation = useRef<number | null>(null);
   const position = useRef(0);
 
@@ -43,11 +50,11 @@ export function SpinViewer({ manifest, hotspots, label }: { manifest: SpinManife
     animation.current = null;
   };
 
-  // Load a few evenly spaced frames first so turning works at once, then the rest.
+  // Load every few frames first so the viewer responds at once, then the rest.
   useEffect(() => {
     let cancelled = false;
-    const order = [...Array.from({ length: count }, (_, i) => i).filter((i) => i % 3 === 0), ...Array.from({ length: count }, (_, i) => i).filter((i) => i % 3 !== 0)];
-    const queue = order.filter((i) => i !== 0);
+    const all = Array.from({ length: count }, (_, i) => i);
+    const queue = [...all.filter((i) => i % 3 === 0), ...all.filter((i) => i % 3 !== 0)].filter((i) => i !== 0);
     const next = () => {
       const index = queue.shift();
       if (index === undefined || cancelled) return;
@@ -57,13 +64,13 @@ export function SpinViewer({ manifest, hotspots, label }: { manifest: SpinManife
         setLoaded((current) => new Set(current).add(index));
         next();
       };
-      img.src = frameSrc(manifest.pattern, index);
+      img.src = manifest.frames[index];
     };
     for (let lane = 0; lane < 4; lane += 1) next();
     return () => { cancelled = true; };
-  }, [count, manifest.pattern]);
+  }, [count, manifest.frames]);
 
-  // Show the nearest frame that has loaded, so the image never goes blank.
+  // Show the nearest loaded frame so the image never goes blank.
   const visibleFrame = useMemo(() => {
     if (loaded.has(frame)) return frame;
     for (let step = 1; step < count; step += 1) {
@@ -73,30 +80,29 @@ export function SpinViewer({ manifest, hotspots, label }: { manifest: SpinManife
     return 0;
   }, [frame, loaded, count]);
 
-  // One gentle turn to show that the product rotates, unless motion is reduced.
+  // A 360 sequence turns once on load to show that it rotates.
   useEffect(() => {
-    if (interacted || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (!isSpin || interacted || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     if (loaded.size < Math.ceil(count / 3)) return;
     let start: number | null = null;
     const step = (time: number) => {
       start ??= time;
       const progress = Math.min(1, (time - start) / 2200);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      show(eased * count);
+      show((1 - Math.pow(1 - progress, 3)) * count);
       if (progress < 1) animation.current = requestAnimationFrame(step);
       else { show(0); setInteracted(true); }
     };
     const timer = window.setTimeout(() => { animation.current = requestAnimationFrame(step); }, 600);
     return () => { window.clearTimeout(timer); stopAnimation(); };
-  }, [interacted, loaded.size, count, show]);
+  }, [isSpin, interacted, loaded.size, count, show]);
 
-  const animateTo = (target: number) => {
+  const goTo = (target: number) => {
     stopAnimation();
     setInteracted(true);
+    if (!isSpin || window.matchMedia("(prefers-reduced-motion: reduce)").matches) { show(target); return; }
     const from = position.current;
     let delta = mod(target - from, count);
     if (delta > count / 2) delta -= count;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) { show(from + delta); return; }
     let start: number | null = null;
     const step = (time: number) => {
       start ??= time;
@@ -110,9 +116,8 @@ export function SpinViewer({ manifest, hotspots, label }: { manifest: SpinManife
   const onPointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
     if ((event.target as HTMLElement).closest("button")) return;
     stopAnimation();
-    setInteracted(true);
     event.currentTarget.setPointerCapture(event.pointerId);
-    drag.current = { x: event.clientX, frame: position.current, lastX: event.clientX, lastT: performance.now(), velocity: 0 };
+    drag.current = { x: event.clientX, frame: position.current, lastX: event.clientX, lastT: performance.now(), velocity: 0, moved: false };
   };
 
   const onPointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
@@ -122,12 +127,13 @@ export function SpinViewer({ manifest, hotspots, label }: { manifest: SpinManife
       return;
     }
     if (!drag.current || !rect) return;
-    // Dragging across the full width turns the product once.
-    const framesPerPixel = count / rect.width;
-    show(drag.current.frame - (event.clientX - drag.current.x) * framesPerPixel);
+    const dx = event.clientX - drag.current.x;
+    if (Math.abs(dx) > 4) { drag.current.moved = true; setInteracted(true); }
+    // A 360 sequence turns once across the full width; angles step every fifth of the width.
+    const framesPerPixel = isSpin ? count / rect.width : 5 / rect.width;
+    show(drag.current.frame - dx * framesPerPixel);
     const now = performance.now();
-    const dt = Math.max(1, now - drag.current.lastT);
-    drag.current.velocity = (-(event.clientX - drag.current.lastX) * framesPerPixel) / dt;
+    drag.current.velocity = (-(event.clientX - drag.current.lastX) * framesPerPixel) / Math.max(1, now - drag.current.lastT);
     drag.current.lastX = event.clientX;
     drag.current.lastT = now;
   };
@@ -136,7 +142,7 @@ export function SpinViewer({ manifest, hotspots, label }: { manifest: SpinManife
     if (!drag.current) return;
     let velocity = drag.current.velocity * 16;
     drag.current = null;
-    if (Math.abs(velocity) < 0.05 || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (!isSpin || Math.abs(velocity) < 0.05 || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const glide = () => {
       velocity *= 0.92;
       show(position.current + velocity);
@@ -145,12 +151,14 @@ export function SpinViewer({ manifest, hotspots, label }: { manifest: SpinManife
     animation.current = requestAnimationFrame(glide);
   };
 
+  const step = (by: number) => { stopAnimation(); setInteracted(true); show(Math.round(position.current) + by); };
+
   const onKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
-    if (event.key === "ArrowRight") { event.preventDefault(); stopAnimation(); setInteracted(true); show(position.current + 1); }
-    if (event.key === "ArrowLeft") { event.preventDefault(); stopAnimation(); setInteracted(true); show(position.current - 1); }
+    if (event.key === "ArrowRight") { event.preventDefault(); step(1); }
+    if (event.key === "ArrowLeft") { event.preventDefault(); step(-1); }
   };
 
-  // For each hotspot, the frame where it faces the viewer most directly.
+  // For each hotspot, the frame where it sits closest to the centre.
   const bestFrame = useMemo(() => Object.fromEntries(hotspots.map((spot) => {
     let best = 0;
     let score = Infinity;
@@ -164,11 +172,12 @@ export function SpinViewer({ manifest, hotspots, label }: { manifest: SpinManife
   const openSpot = (id: string) => {
     setZoom(false);
     setActive(id);
-    animateTo(bestFrame[id] ?? 0);
+    if (!manifest.hotspots[visibleFrame]?.[id]) goTo(bestFrame[id] ?? 0);
   };
 
   const activeSpot = hotspots.find((spot) => spot.id === active);
   const positions = manifest.hotspots[visibleFrame] || {};
+  const stepSize = isSpin ? 3 : 1;
 
   return (
     <div className="spin">
@@ -176,7 +185,7 @@ export function SpinViewer({ manifest, hotspots, label }: { manifest: SpinManife
         ref={stage}
         className={`spin-stage${zoom ? " is-zoomed" : ""}`}
         role="img"
-        aria-label={`${label}. Drag sideways or use the arrow keys to turn it.`}
+        aria-label={`${label}. ${manifest.alts?.[visibleFrame] || ""}. Drag sideways or use the arrow keys to change the view.`}
         tabIndex={0}
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
@@ -184,10 +193,10 @@ export function SpinViewer({ manifest, hotspots, label }: { manifest: SpinManife
         onPointerCancel={onPointerUp}
         onKeyDown={onKeyDown}
       >
-        {/* eslint-disable-next-line @next/next/no-img-element -- frames are pre-sized files swapped many times a second */}
+        {/* eslint-disable-next-line @next/next/no-img-element -- pre-sized frames swapped as the viewer turns */}
         <img
           className="spin-frame"
-          src={frameSrc(manifest.pattern, visibleFrame)}
+          src={manifest.frames[visibleFrame]}
           alt=""
           draggable={false}
           style={{ transform: zoom ? "scale(2)" : undefined, transformOrigin: origin }}
@@ -208,18 +217,29 @@ export function SpinViewer({ manifest, hotspots, label }: { manifest: SpinManife
             </button>
           );
         })}
-        {!interacted && <span className="spin-hint" aria-hidden="true">Drag to turn</span>}
-        <span className="concept-label">{manifest.placeholder ? "Placeholder 360 view. Real product photos coming." : "Product photography"}</span>
+        {!interacted && <span className="spin-hint" aria-hidden="true">{isSpin ? "Drag to turn" : "Drag to see more angles"}</span>}
+        <span className="concept-label">{isSpin ? "Real product, photographed on a turntable" : "Real product photo. Background edited."}</span>
       </div>
 
       <div className="spin-controls">
-        <button type="button" onClick={() => { stopAnimation(); setInteracted(true); show(position.current - 3); }} aria-label="Turn left"><ArrowCounterClockwise size={18} /></button>
-        <span className="spin-angle" aria-live="polite">{Math.round((frame / count) * 360)}°</span>
-        <button type="button" onClick={() => { stopAnimation(); setInteracted(true); show(position.current + 3); }} aria-label="Turn right"><ArrowClockwise size={18} /></button>
+        <button type="button" onClick={() => step(-stepSize)} aria-label="Previous view"><ArrowLeft size={18} /></button>
+        <span className="spin-angle" aria-live="polite">{isSpin ? `${Math.round((frame / count) * 360)}°` : `${visibleFrame + 1} / ${count}`}</span>
+        <button type="button" onClick={() => step(stepSize)} aria-label="Next view"><ArrowRight size={18} /></button>
         <button type="button" onClick={() => setZoom((value) => !value)} aria-pressed={zoom} aria-label={zoom ? "Zoom out" : "Zoom in"}>
           {zoom ? <MagnifyingGlassMinus size={18} /> : <MagnifyingGlassPlus size={18} />}
         </button>
       </div>
+
+      {!isSpin && manifest.thumbs && (
+        <div className="spin-thumbs" role="group" aria-label="Choose a view">
+          {manifest.thumbs.map((thumb, index) => (
+            <button key={thumb} type="button" aria-pressed={visibleFrame === index} aria-label={manifest.alts?.[index] || `View ${index + 1}`} onClick={() => goTo(index)}>
+              {/* eslint-disable-next-line @next/next/no-img-element -- small fixed thumbnails */}
+              <img src={thumb} alt="" width={96} height={72} loading="lazy" />
+            </button>
+          ))}
+        </div>
+      )}
 
       <div className="spin-features" role="group" aria-label="Product features">
         {hotspots.map((spot) => (

@@ -2395,7 +2395,7 @@ button[aria-busy="true"] {
 
 .spin-stage {
   position: relative;
-  aspect-ratio: 1 / 1;
+  aspect-ratio: 4 / 3;
   max-width: 100%;
   overflow: hidden;
   border: 1px solid var(--line);
@@ -2449,7 +2449,7 @@ button[aria-busy="true"] {
 .spin-hint {
   position: absolute;
   left: 50%;
-  bottom: 56px;
+  top: 12px;
   transform: translateX(-50%);
   padding: 6px 12px;
   border-radius: 999px;
@@ -2594,5 +2594,47 @@ button[aria-busy="true"] {
 @media (max-width: 600px) {
   .buy-feature-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+.spin-thumbs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scrollbar-width: thin;
+}
+
+.spin-thumbs button {
+  flex: none;
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--porcelain);
+  cursor: pointer;
+}
+
+.spin-thumbs button[aria-pressed="true"] {
+  border-color: var(--violet);
+}
+
+.spin-thumbs img {
+  display: block;
+  width: 96px;
+  height: 72px;
+  object-fit: cover;
+}
+
+@media (max-width: 600px) {
+  .spin-stage .concept-label {
+    right: 8px;
+    bottom: 8px;
+    padding: 5px 9px;
+    font-size: 0.62rem;
+  }
+
+  .spin-hint {
+    font-size: 0.68rem;
   }
 }

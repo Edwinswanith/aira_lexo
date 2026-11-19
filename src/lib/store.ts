@@ -8,12 +8,12 @@ import { z } from "zod";
 export const product = {
   sku: "aira-recorder",
   name: "Aira consultation recorder",
-  shortDescription: "A dedicated, doctor-controlled consultation recorder with access to the Aira review app.",
+  shortDescription: "A compact, one-button consultation recorder that you control, with access to the Aira review app.",
   unitPricePaise: 999_900,
   gstRatePercent: 18,
   maxQuantityPerOrder: 5,
-  imagePath: "/images/hero-device.png",
-  imageAlt: "Concept render of the compact black Aira recorder",
+  imagePath: "/images/product/aira-00-hero-lit-three-quarter.webp",
+  imageAlt: "Aira recorder with its button lit amber",
   inTheBox: ["Aira recorder", "USB-C charging cable", "Onboarding call with our team", "12 months of Aira review app access"],
 } as const;
 

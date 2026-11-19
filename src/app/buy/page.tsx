@@ -2,10 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CheckCircle, ShieldCheck, Truck, ArrowCounterClockwise } from "@phosphor-icons/react/dist/ssr";
-import manifest from "@/content/product-360.json";
+import gallery from "@/content/product-gallery.json";
 import { BuyPanel } from "@/components/buy-panel";
-import { DeviceStateSimulator } from "@/components/interactions";
-import { SpinViewer, type SpinHotspot } from "@/components/spin-viewer";
+import { SpinViewer, type SpinHotspot, type SpinManifest } from "@/components/spin-viewer";
 import { storePolicy } from "@/lib/business";
 import { getDatabase } from "@/lib/mongodb";
 import { availableStock } from "@/lib/orders";
@@ -19,25 +18,27 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
+const manifest = gallery as SpinManifest;
+
 const hotspots: SpinHotspot[] = [
-  { id: "button", title: "One-button control", text: "One press starts capture and one press ends it, so the moment recording begins is never in doubt. The light ring shows the state at a glance." },
-  { id: "display", title: "Visible status", text: "The e-paper display tells you and your patient what the recorder is doing. Tap a state to see it.", extra: <DeviceStateSimulator /> },
-  { id: "microphone", title: "Microphone", text: "Captures the consultation conversation once the patient has agreed to recording." },
+  { id: "button", title: "One-button control", text: "One press starts capture and one press ends it, so the moment recording begins is never in doubt. The button glows amber when Aira is ready to go." },
   { id: "usb", title: "USB-C charging", text: "Charges over a standard USB-C cable, included in the box." },
+  { id: "pinhole", title: "Charging indicator", text: "A small indicator on the top shows the charging status." },
+  { id: "slot", title: "Badge-holder slot", text: "Thread a badge holder or lanyard through the slot at the end so the recorder stays with you between consultations." },
 ];
 
 const features: Array<[string, string]> = [
-  ["Consent first", "The workflow starts with a clear explanation and the patient's agreement. A patient can decline without losing access to care."],
-  ["Local storage", "Consultations are kept on the device until a connection is available, so a weak signal does not interrupt the visit."],
-  ["Doctor review", "A structured draft goes to the Aira review app. Nothing becomes part of the record until you review and approve it."],
-  ["Return-visit context", "Approved context is ready when the patient comes back, so you remember the thread, not only the last line."],
+  ["Ready at a glance", "The button glows amber when Aira is ready, so you know it can start a consultation before the patient sits down."],
+  ["Wear it or set it down", "Clip it to a badge holder or lanyard through the end slot, or leave it on the desk. It is compact and flat."],
+  ["Consent first", "Recording starts only after the patient receives a clear explanation and agrees. A patient can decline without losing access to care."],
+  ["You approve the record", "A structured draft goes to the Aira review app. Nothing becomes part of the record until you review and approve it."],
 ];
 
 const specs: Array<[string, string]> = [
-  ["Controls", "One button with a light ring"],
-  ["Display", "E-paper status display"],
-  ["Storage", "On-device storage before secure sync"],
-  ["Charging", "USB-C"],
+  ["Controls", "One button, glows amber when ready"],
+  ["Charging", "USB-C, with a charging indicator"],
+  ["Carry", "Badge-holder slot at one end"],
+  ["Case", "Matte black, textured top, 3D-printed"],
   ["Works with", "Aira review app (access included)"],
   ["Ships to", "Addresses within India"],
 ];
