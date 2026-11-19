@@ -1709,3 +1709,7 @@ h3 {
     animation-iteration-count: 1 !important;
   }
 }
+
+.legal address {
+  font-style: normal;
+}

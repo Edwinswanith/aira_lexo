@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { getAllInsights } from "@/lib/insights";
 import { absoluteUrl } from "@/lib/site";
+import { storePolicy } from "@/lib/business";
 
 const routes = [
   { path: "/", changeFrequency: "weekly", priority: 1 },
@@ -16,11 +17,16 @@ const routes = [
   { path: "/privacy-policy", changeFrequency: "yearly", priority: 0.3 },
   { path: "/terms-of-service", changeFrequency: "yearly", priority: 0.3 },
   { path: "/data-deletion", changeFrequency: "yearly", priority: 0.3 },
+  { path: "/contact", changeFrequency: "yearly", priority: 0.5 },
+  { path: "/refund-policy", changeFrequency: "yearly", priority: 0.3 },
+  { path: "/shipping-policy", changeFrequency: "yearly", priority: 0.3 },
 ] as const;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const legalRoutes = new Set<string>(["/privacy-policy", "/terms-of-service", "/data-deletion"]);
-  const pages = routes.map((route) => ({ url: absoluteUrl(route.path), lastModified: new Date(legalRoutes.has(route.path) ? "2026-11-06" : "2026-08-03"), changeFrequency: route.changeFrequency, priority: route.priority }));
+  const storeRoutes = new Set<string>(["/contact", "/refund-policy", "/shipping-policy"]);
+  const lastModified = (path: string) => storeRoutes.has(path) ? storePolicy.lastUpdated : legalRoutes.has(path) ? "2026-11-06" : "2026-08-03";
+  const pages = routes.map((route) => ({ url: absoluteUrl(route.path), lastModified: new Date(lastModified(route.path)), changeFrequency: route.changeFrequency, priority: route.priority }));
   const insights = (await getAllInsights(false)).map(({ frontmatter }) => ({
     url: absoluteUrl(`/insights/${frontmatter.slug}`),
     lastModified: new Date(frontmatter.updatedAt || frontmatter.publishedAt),

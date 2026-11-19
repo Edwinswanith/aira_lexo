@@ -1,18 +1,25 @@
 /**
  * Public business details and store policy terms.
  *
- * FILL IN: replace every value that starts with "[" before launch.
  * These details appear publicly on /contact, /refund-policy and /shipping-policy.
- * `npm run check:business` fails a production build while any placeholder remains.
+ * A value in square brackets is a placeholder: `npm run check:business` fails the
+ * build while any placeholder remains.
  */
 export const business = {
   /** Must match the Certificate of Incorporation exactly. */
   legalName: "AiraLexo Solutions Private Limited",
-  supportEmail: "[SUPPORT_EMAIL]",
+  supportEmail: "edwin@airalexo.in",
   /** Include the country code, for example +91 98765 43210. */
-  supportPhone: "[SUPPORT_PHONE]",
+  supportPhone: "+91 88700 44907",
   /** Registered office address as printed on the Certificate of Incorporation. */
-  registeredAddress: "[REGISTERED_ADDRESS]",
+  registeredAddress: [
+    "F.1#348a, Om Shakthi Flt,",
+    "Village High Road, Sholinganallur,",
+    "Saidapet, Kanchipuram,",
+    "Tamil Nadu 600119, India",
+  ],
+  /** Named under the Consumer Protection (E-Commerce) Rules, 2020. */
+  grievanceOfficer: { name: "Edwin Swanith", designation: "Co-founder" },
   /** Days and hours when the support line is answered. */
   supportHours: "Monday to Saturday, 10:00 to 18:00 IST",
 } as const;
@@ -29,6 +36,11 @@ export const storePolicy = {
   shippingCharge: "Free",
   shipsTo: "addresses within India",
 } as const;
+
+/** Digits only, for tel: and WhatsApp links. */
+export function phoneDigits(phone: string) {
+  return phone.replace(/[^0-9]/g, "");
+}
 
 export function isPlaceholder(value: string) {
   return value.startsWith("[") && value.endsWith("]");

@@ -29,9 +29,12 @@ export function Footer() {
             <Link href="/founders">Founders</Link>
             <Link href="/patient-information">Patient Information</Link>
             <Link href="/pilot">Join the Pilot</Link>
+            <Link href="/contact">Contact</Link>
             <Link href="/privacy-policy">Privacy Policy</Link>
             <Link href="/terms-of-service">Terms</Link>
             <Link href="/data-deletion">Data Deletion</Link>
+            <Link href="/refund-policy">Refund Policy</Link>
+            <Link href="/shipping-policy">Shipping Policy</Link>
           </nav>
         </div>
         <div className="footer-bottom">
