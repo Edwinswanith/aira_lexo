@@ -18,7 +18,7 @@ const states: Record<Order["status"], { label: string; title: string; text: stri
   pending_payment: { label: "PROCESSING", title: "Confirming your payment", text: "This usually takes a few seconds. This page updates by itself. If you closed the payment window, no money has been taken.", tone: "pending" },
   paid: { label: "PAYMENT VERIFIED", title: "Your order is confirmed", text: "Thank you. We will dispatch within 2 to 3 working days and email you the tracking number.", tone: "ok" },
   packed: { label: "PACKED", title: "Your order is packed", text: "It will be handed to the courier shortly.", tone: "ok" },
-  shipped: { label: "SHIPPED", title: "Your order is on its way", text: "We have emailed you the courier and tracking number.", tone: "ok" },
+  shipped: { label: "SHIPPED", title: "Your order is on its way", text: "Delivery usually takes 3 to 7 working days.", tone: "ok" },
   delivered: { label: "DELIVERED", title: "Your order was delivered", text: "We hope Aira serves your consultations well.", tone: "ok" },
   expired: { label: "NOT PAID", title: "This order was not paid", text: "The 30 minute payment window ended and no money was taken. You can place a new order at any time.", tone: "stop" },
   cancelled: { label: "CANCELLED", title: "This order was cancelled", text: "No payment is due. Contact us if you have questions.", tone: "stop" },
@@ -45,6 +45,12 @@ export default async function OrderPage({ params, searchParams }: { params: Prom
             <h1>{state.title}</h1>
             <p>{state.text}</p>
             {order.status === "paid" && order.confirmation_email === "sent" && <p>A confirmation email is on its way to {order.customer.email}.</p>}
+            {order.shipment && (order.status === "shipped" || order.status === "delivered") && (
+              <p className="order-tracking">
+                Courier: <strong>{order.shipment.courier}</strong>. Tracking number: <strong>{order.shipment.tracking_number}</strong>
+                {order.shipment.tracking_url && <> (<a href={order.shipment.tracking_url} target="_blank" rel="noopener noreferrer">track your parcel</a>)</>}
+              </p>
+            )}
             {order.status === "pending_payment" && order.last_payment_error && <p className="field-error">Last attempt: {order.last_payment_error}</p>}
           </div>
           {order.status === "pending_payment" && <OrderStatusRefresher />}

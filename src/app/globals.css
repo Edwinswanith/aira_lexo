@@ -2253,3 +2253,13 @@ button[aria-busy="true"] {
   opacity: 0.7;
   cursor: progress;
 }
+
+.order-tracking {
+  margin-top: 12px !important;
+  color: white !important;
+}
+
+.order-tracking a {
+  color: var(--mint);
+  text-decoration: underline;
+}
