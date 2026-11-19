@@ -75,3 +75,13 @@ export function createRazorpayOrder(input: { amountPaise: number; receipt: strin
 export function fetchRazorpayPayment(paymentId: string) {
   return call<RazorpayPayment>(`/payments/${encodeURIComponent(paymentId)}`);
 }
+
+export type RazorpayRefund = { id: string; amount: number; status: string };
+
+/** Refunds a captured payment in full or in part. */
+export function refundRazorpayPayment(paymentId: string, amountPaise: number, notes: Record<string, string>) {
+  return call<RazorpayRefund>(`/payments/${encodeURIComponent(paymentId)}/refund`, {
+    method: "POST",
+    body: JSON.stringify({ amount: amountPaise, speed: "normal", notes }),
+  });
+}

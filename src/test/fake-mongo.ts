@@ -97,6 +97,12 @@ export function fakeDb(uniqueFields: Record<string, string[]> = {}) {
         Object.assign(doc, next);
         return options?.returnDocument === "after" ? doc : before;
       },
+      findOneAndDelete: async (filter: Doc) => {
+        const index = docs.findIndex((doc) => matches(doc, filter));
+        if (index < 0) return null;
+        const [removed] = docs.splice(index, 1);
+        return removed;
+      },
       deleteOne: async (filter: Doc) => {
         const index = docs.findIndex((doc) => matches(doc, filter));
         if (index >= 0) docs.splice(index, 1);

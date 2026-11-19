@@ -44,3 +44,41 @@ export async function sendOrderPaidEmails(order: Order, statusUrl?: string): Pro
     return "failed";
   }
 }
+
+/** Tells the customer their order has shipped, with the tracking number. */
+export async function sendOrderShippedEmail(order: Order) {
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey || !order.shipment) return false;
+  const tracking = order.shipment.tracking_url
+    ? `<a href="${escapeHtml(order.shipment.tracking_url)}">${escapeHtml(order.shipment.tracking_number)}</a>`
+    : escapeHtml(order.shipment.tracking_number);
+  try {
+    const result = await new Resend(apiKey).emails.send({
+      from: "Aira Orders <orders@airalexo.in>",
+      to: order.customer.email,
+      replyTo: business.supportEmail,
+      subject: `Your Aira order ${order.order_number} has shipped`,
+      html: `<p>Hello ${escapeHtml(order.customer.name)},</p><p>Your order <strong>${escapeHtml(order.order_number)}</strong> is on its way.</p><p><strong>Courier:</strong> ${escapeHtml(order.shipment.courier)}<br><strong>Tracking number:</strong> ${tracking}</p><p>Delivery usually takes 3 to 7 working days. Questions? Reply to this email or call ${escapeHtml(business.supportPhone)}.</p><p>${escapeHtml(business.legalName)}</p>`,
+    });
+    return !result.error;
+  } catch {
+    return false;
+  }
+}
+
+/** Sends a one-time admin sign-in link. */
+export async function sendAdminLoginEmail(email: string, link: string) {
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) return false;
+  try {
+    const result = await new Resend(apiKey).emails.send({
+      from: "Aira Admin <admin@airalexo.in>",
+      to: email,
+      subject: "Your Aira order desk sign-in link",
+      html: `<p>Use this link to sign in to the Aira order desk. It works once and expires in 15 minutes.</p><p><a href="${escapeHtml(link)}">Sign in to the order desk</a></p><p>If you did not ask to sign in, ignore this email.</p>`,
+    });
+    return !result.error;
+  } catch {
+    return false;
+  }
+}

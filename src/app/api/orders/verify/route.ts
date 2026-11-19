@@ -4,6 +4,7 @@ import { getDatabase } from "@/lib/mongodb";
 import { confirmPaidOrder } from "@/lib/order-payment";
 import { findOrderByNumber, recordPaymentFailure, tokenMatches } from "@/lib/orders";
 import { fetchRazorpayPayment, verifyPaymentSignature } from "@/lib/razorpay";
+import { originFromHeaders } from "@/lib/request-origin";
 
 export const runtime = "nodejs";
 
@@ -50,7 +51,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ status: "processing" }, { status: 202 });
     }
 
-    const statusPath = `/order/${encodeURIComponent(order.order_number)}?t=${encodeURIComponent(input.accessToken)}`;
+    const statusUrl = `${originFromHeaders(request.headers)}/order/${encodeURIComponent(order.order_number)}?t=${encodeURIComponent(input.accessToken)}`;
     const outcome = await confirmPaidOrder(db, {
       razorpayOrderId: payment.order_id,
       paymentId: payment.id,
@@ -58,7 +59,7 @@ export async function POST(request: NextRequest) {
       currency: payment.currency,
       method: payment.method,
       source: "checkout",
-    }, statusPath);
+    }, statusUrl);
 
     if (outcome.result === "paid" || outcome.result === "already_paid") return NextResponse.json({ status: "paid" });
     return NextResponse.json({ status: "needs_review" }, { status: 409 });

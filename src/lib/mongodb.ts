@@ -27,6 +27,8 @@ async function ensureIndexes(db: Db) {
     orders.createIndex({ created_at: -1 }, { name: "created_desc" }),
     db.collection("order_rate_limits").createIndex({ key: 1, created_at: -1 }, { name: "key_created" }),
     db.collection("order_rate_limits").createIndex({ created_at: 1 }, { name: "expire_24_hours", expireAfterSeconds: 24 * 60 * 60 }),
+    db.collection("admin_login_tokens").createIndex({ expires_at: 1 }, { name: "expire_at", expireAfterSeconds: 0 }),
+    db.collection("admin_sessions").createIndex({ expires_at: 1 }, { name: "expire_at", expireAfterSeconds: 0 }),
     db.collection("payment_events").createIndex({ received_at: 1 }, { name: "expire_180_days", expireAfterSeconds: 180 * 24 * 60 * 60 }),
     applications.createIndex({ email: 1, created_at: -1 }, { name: "email_created" }),
     applications.createIndex({ notification_status: 1 }, { name: "notification_status" }),

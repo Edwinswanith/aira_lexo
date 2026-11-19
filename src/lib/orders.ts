@@ -33,6 +33,10 @@ export type Order = {
   last_payment_error?: string;
   needs_attention?: string;
   confirmation_email?: "sent" | "failed" | "not_configured";
+  shipment?: { courier: string; tracking_number: string; tracking_url: string | null; shipped_at: Date };
+  delivered_at?: Date;
+  refund?: { id: string; amount_paise: number; refunded_at: Date };
+  internal_note?: string;
   events: OrderEvent[];
 };
 
@@ -256,4 +260,76 @@ export async function recordWebhookEvent(db: Db, eventId: string, event: string,
     if (error instanceof MongoServerError && error.code === 11000) return false;
     throw error;
   }
+}
+
+/** Statuses that count as a sale in reports. */
+export const SOLD_STATUSES: OrderStatus[] = ["paid", "packed", "shipped", "delivered"];
+
+/**
+ * Moves an order from one of `from` to `to`, recording who did it. Returns the
+ * updated order, or null if the order was not in an allowed status.
+ */
+export async function transitionOrder(
+  db: Db,
+  orderNumber: string,
+  from: OrderStatus[],
+  to: OrderStatus,
+  actor: string,
+  set: Partial<Order> = {},
+  now = new Date(),
+) {
+  return orders(db).findOneAndUpdate(
+    { order_number: orderNumber, status: { $in: from } },
+    { $set: { ...set, status: to, updated_at: now }, $push: { events: { at: now, type: to, detail: actor } } },
+    { returnDocument: "after" },
+  );
+}
+
+export async function addOrderNote(db: Db, orderNumber: string, note: string, actor: string, now = new Date()) {
+  await orders(db).updateOne(
+    { order_number: orderNumber },
+    { $set: { internal_note: note.slice(0, 1000), updated_at: now }, $push: { events: { at: now, type: "note", detail: actor } } },
+  );
+}
+
+export async function clearAttention(db: Db, orderNumber: string, actor: string, now = new Date()) {
+  await orders(db).updateOne(
+    { order_number: orderNumber },
+    { $unset: { needs_attention: "" }, $push: { events: { at: now, type: "attention_cleared", detail: actor } } },
+  );
+}
+
+function escapeRegex(value: string) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+export async function listOrders(db: Db, options: { status?: OrderStatus | "attention" | "all"; search?: string; limit?: number } = {}) {
+  const filter: Record<string, unknown> = {};
+  if (options.status === "attention") filter.needs_attention = { $exists: true };
+  else if (options.status && options.status !== "all") filter.status = options.status;
+  const search = options.search?.trim();
+  if (search) {
+    const pattern = new RegExp(escapeRegex(search), "i");
+    filter.$or = [{ order_number: pattern }, { "customer.name": pattern }, { "customer.email": pattern }, { "customer.phone": pattern }];
+  }
+  return orders(db).find(filter).sort({ created_at: -1 }).limit(options.limit ?? 200).toArray();
+}
+
+export async function salesSummary(db: Db, now = new Date()) {
+  // Day and month boundaries in India Standard Time (UTC+5:30).
+  const istOffset = 330 * 60 * 1000;
+  const ist = new Date(now.getTime() + istOffset);
+  const dayStart = new Date(Date.UTC(ist.getUTCFullYear(), ist.getUTCMonth(), ist.getUTCDate()) - istOffset);
+  const monthStart = new Date(Date.UTC(ist.getUTCFullYear(), ist.getUTCMonth(), 1) - istOffset);
+  const sold = await orders(db).find({ status: { $in: SOLD_STATUSES } }, { projection: { amount_paise: 1, quantity: 1, paid_at: 1 } }).toArray();
+  const sum = (since?: Date) => sold
+    .filter((order) => !since || (order.paid_at && order.paid_at >= since))
+    .reduce((total, order) => ({ orders: total.orders + 1, units: total.units + order.quantity, revenuePaise: total.revenuePaise + order.amount_paise }), { orders: 0, units: 0, revenuePaise: 0 });
+  const toShip = await orders(db).countDocuments({ status: { $in: ["paid", "packed"] } });
+  const attention = await orders(db).countDocuments({ needs_attention: { $exists: true } });
+  return { today: sum(dayStart), month: sum(monthStart), allTime: sum(), toShip, attention };
+}
+
+export async function setStock(db: Db, available: number, now = new Date()) {
+  await inventory(db).updateOne({ _id: product.sku }, { $set: { available, updated_at: now } }, { upsert: true });
 }
