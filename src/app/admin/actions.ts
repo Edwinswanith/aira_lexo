@@ -24,7 +24,8 @@ export async function requestLoginLink(formData: FormData) {
   // Same response whether or not the email is allowed, so the list cannot be probed.
   if (z.string().email().safeParse(email).success && isAdminEmail(email)) {
     const token = await createLoginToken(db, email);
-    await sendAdminLoginEmail(email, `${originFromHeaders(requestHeaders)}/admin/verify?token=${encodeURIComponent(token)}`);
+    const sent = await sendAdminLoginEmail(email, `${originFromHeaders(requestHeaders)}/admin/verify?token=${encodeURIComponent(token)}`);
+    if (!sent) console.error("Admin sign-in email was not sent. Check RESEND_API_KEY and the Resend logs.");
   }
   redirect("/admin/login?sent=1");
 }

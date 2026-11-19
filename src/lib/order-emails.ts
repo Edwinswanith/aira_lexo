@@ -69,7 +69,10 @@ export async function sendOrderShippedEmail(order: Order) {
 /** Sends a one-time admin sign-in link. */
 export async function sendAdminLoginEmail(email: string, link: string) {
   const apiKey = process.env.RESEND_API_KEY;
-  if (!apiKey) return false;
+  if (!apiKey) {
+    console.error("RESEND_API_KEY is not set for this deployment");
+    return false;
+  }
   try {
     const result = await new Resend(apiKey).emails.send({
       from: "Aira Admin <admin@airalexo.in>",
@@ -77,6 +80,7 @@ export async function sendAdminLoginEmail(email: string, link: string) {
       subject: "Your Aira order desk sign-in link",
       html: `<p>Use this link to sign in to the Aira order desk. It works once and expires in 15 minutes.</p><p><a href="${escapeHtml(link)}">Sign in to the order desk</a></p><p>If you did not ask to sign in, ignore this email.</p>`,
     });
+    if (result.error) console.error("Resend rejected the admin sign-in email", result.error);
     return !result.error;
   } catch {
     return false;
