@@ -2765,3 +2765,8 @@ button[aria-busy="true"] {
 .buy-also-eyebrow {
   margin-top: 28px;
 }
+
+.desktop-nav a.nav-buy {
+  color: var(--violet);
+  font-weight: 750;
+}

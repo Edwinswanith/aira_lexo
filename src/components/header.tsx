@@ -14,8 +14,10 @@ const nav = [
   ["Founders", "/founders"],
 ];
 
-export function Header() {
+/** `showBuy` is decided on the server, so Buy only appears while the store is switched on. */
+export function Header({ showBuy = false }: { showBuy?: boolean }) {
   const [open, setOpen] = useState(false);
+  const links = showBuy ? [...nav, ["Buy", "/buy"]] : nav;
 
   return (
     <header className="site-header">
@@ -27,7 +29,7 @@ export function Header() {
           <span>Aira</span>
         </Link>
         <nav className="desktop-nav" aria-label="Primary navigation">
-          {nav.map(([label, href]) => <Link href={href} key={href} prefetch={false}>{label}</Link>)}
+          {links.map(([label, href]) => <Link href={href} key={href} prefetch={false} className={href === "/buy" ? "nav-buy" : undefined}>{label}</Link>)}
         </nav>
         <Link className="button button-violet header-cta" href="/pilot" prefetch={false}>Join the Clinical Pilot</Link>
         <button
@@ -43,7 +45,7 @@ export function Header() {
       </div>
       {open && (
         <nav className="mobile-nav" id="mobile-navigation" aria-label="Mobile navigation">
-          {nav.map(([label, href]) => (
+          {links.map(([label, href]) => (
             <Link href={href} key={href} prefetch={false} onClick={() => setOpen(false)}>{label}</Link>
           ))}
           <Link href="/pilot" prefetch={false} onClick={() => setOpen(false)}>Join the Clinical Pilot</Link>
