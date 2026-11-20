@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CheckCircle, ShieldCheck, Truck, ArrowCounterClockwise } from "@phosphor-icons/react/dist/ssr";
@@ -83,6 +84,19 @@ export default async function BuyPage() {
             </ul>
             <p className="muted buy-placeholder-note">Price and box contents shown here are placeholders until launch.</p>
           </div>
+        </div>
+      </section>
+
+      <section className="section-tight">
+        <div className="container">
+          <figure className="buy-lifestyle">
+            <Image src="/images/product/aira-ai-desk.webp" alt="AI-generated image of the Aira recorder on a consultation desk, its button glowing amber" fill sizes="(max-width: 1240px) 100vw, 1240px" />
+            <figcaption>
+              <p className="eyebrow">At the consultation desk</p>
+              <strong>Ready before the patient sits down.</strong>
+            </figcaption>
+            <span className="concept-label">AI-generated image</span>
+          </figure>
         </div>
       </section>
 

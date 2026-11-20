@@ -1,7 +1,7 @@
 {
  "placeholder": false,
  "mode": "angles",
- "frameCount": 8,
+ "frameCount": 9,
  "frames": [
   "/images/product/aira-00-hero-lit-three-quarter.webp",
   "/images/product/aira-01-lit-side.webp",
@@ -10,7 +10,8 @@
   "/images/product/aira-04-top-angled.webp",
   "/images/product/aira-05-top.webp",
   "/images/product/aira-06-end-badge-slot.webp",
-  "/images/product/aira-07-underside.webp"
+  "/images/product/aira-07-underside.webp",
+  "/images/product/aira-08-ai-usb-c-side.webp"
  ],
  "thumbs": [
   "/images/product/thumb-00-hero-lit-three-quarter.webp",
@@ -20,7 +21,8 @@
   "/images/product/thumb-04-top-angled.webp",
   "/images/product/thumb-05-top.webp",
   "/images/product/thumb-06-end-badge-slot.webp",
-  "/images/product/thumb-07-underside.webp"
+  "/images/product/thumb-07-underside.webp",
+  "/images/product/thumb-08-ai-usb-c-side.webp"
  ],
  "alts": [
   "Aira recorder with its button lit amber, shown at an angle",
@@ -30,7 +32,8 @@
   "Aira recorder top surface at an angle",
   "Aira recorder seen from above",
   "Aira recorder end view showing the badge-holder slot",
-  "Aira recorder underside with the USB-C port"
+  "Aira recorder underside with the USB-C port",
+  "AI-generated studio image of the Aira recorder showing the USB-C side"
  ],
  "hotspots": [
   {
@@ -112,6 +115,18 @@
     40.6,
     62
    ]
-  }
+  },
+  {}
+ ],
+ "labels": [
+  "Real product photo. Background edited.",
+  "Real product photo. Background edited.",
+  "Real product photo. Background edited.",
+  "Real product photo. Background edited.",
+  "Real product photo. Background edited.",
+  "Real product photo. Background edited.",
+  "Real product photo. Background edited.",
+  "Real product photo. Background edited.",
+  "AI-generated image"
  ]
 }

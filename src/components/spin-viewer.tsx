@@ -14,6 +14,8 @@ export type SpinManifest = {
   frames: string[];
   thumbs?: string[];
   alts?: string[];
+  /** Per-frame label, e.g. whether the image is a real photo or AI-generated. */
+  labels?: string[];
   hotspots: Array<Record<string, number[] | null | undefined>>;
 };
 
@@ -218,7 +220,7 @@ export function SpinViewer({ manifest, hotspots, label }: { manifest: SpinManife
           );
         })}
         {!interacted && <span className="spin-hint" aria-hidden="true">{isSpin ? "Drag to turn" : "Drag to see more angles"}</span>}
-        <span className="concept-label">{isSpin ? "Real product, photographed on a turntable" : "Real product photo. Background edited."}</span>
+        <span className="concept-label">{manifest.labels?.[visibleFrame] || (isSpin ? "Real product, photographed on a turntable" : "Real product photo. Background edited.")}</span>
       </div>
 
       <div className="spin-controls">
