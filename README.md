@@ -7,7 +7,7 @@ The public website for Aira, a prototype-stage consultation memory system from A
 - Next.js App Router with strict TypeScript
 - Tailwind CSS plus custom property design tokens
 - Repository-managed MDX Insights
-- Supabase server-side lead storage
+- MongoDB Atlas server-side lead storage
 - Resend application notifications
 - Plausible cookieless analytics
 - Vitest and Playwright
@@ -18,13 +18,13 @@ The public website for Aira, a prototype-stage consultation memory system from A
 2. Copy `.env.example` to `.env.local` and add available credentials.
 3. Run `npm run dev`.
 
-When Supabase and Resend are not configured, local development uses a memory-only form response so the complete user journey can be tested. Production fails safely until storage credentials are present.
+When MongoDB and Resend are not configured, local development uses a memory-only form response so the complete user journey can be tested. Production fails safely until storage credentials are present.
 
 ## Data setup
 
-Apply `supabase/migrations/001_pilot_applications.sql` to the private Supabase project. Only the server route uses the service role. Do not expose the service role through a public environment variable.
+Create a MongoDB Atlas cluster and set `MONGODB_URI` and `MONGODB_DB` (default `aira`). Collections and indexes are created automatically on first connection by `src/lib/mongodb.ts`: `pilot_applications` (12 month TTL retention) and `pilot_rate_limits` (24 hour TTL). Only server routes read the connection string. Never expose it through a `NEXT_PUBLIC_` variable. Use a separate cluster or database for preview deployments so test data never mixes with real applications.
 
-The scheduled Vercel job retries notification failures and deletes application rows older than 12 months. Set `CRON_SECRET` for authorized calls.
+The scheduled Vercel job retries notification failures and deletes applications older than 12 months as a backstop to the TTL index. Set `CRON_SECRET` for authorized calls.
 
 ## Quality checks
 
@@ -39,7 +39,7 @@ The scheduled Vercel job retries notification failures and deletes application r
 
 - Use Aira in public headings.
 - Use Aira Lexo Solutions Private Limited in legal contexts.
-- Mark every product render with `Concept render. Final product may vary.`
+- Label real product photos `Real product photo. Background edited.` and any AI-generated image `AI-generated image`.
 - Do not claim autonomous diagnosis, prescribing, certification, compliance, accuracy, or clinical performance.
 - Keep health-related Insights unpublished until a named clinical reviewer, review date, and appropriate sources are present.
 
@@ -47,8 +47,7 @@ The scheduled Vercel job retries notification failures and deletes application r
 
 - `public/images/aira-logo-mark.png` is the full-resolution transparent Aira mark.
 - `public/images/aira-logo-mark-256.png` is the compact website and browser-icon version.
-- `public/images/prototype/` contains supplied photographs of an early working hardware prototype.
-- The visible Neura name in prototype photographs was temporary. Public copy must keep it separate from the current Aira brand.
+- `public/images/product/` contains the retouched real product photos; `design/product-review/` holds the review rounds and originals' derivatives.
 
 ## Production launch checklist
 

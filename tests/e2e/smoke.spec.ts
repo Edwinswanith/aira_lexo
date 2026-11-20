@@ -3,10 +3,10 @@ import { expect, test } from "@playwright/test";
 test("homepage exposes the product story and working interactions", async ({ page }) => {
   await page.goto("/", { waitUntil: "domcontentloaded" });
   await expect(page.getByRole("heading", { name: "Your consultation memory, ready when the patient returns." })).toBeVisible();
-  await page.getByRole("tab", { name: "REC" }).click();
-  await expect(page.getByRole("tabpanel").first()).toContainText("recording state");
+  await expect(page.getByRole("img", { name: "The Aira recorder, a compact black device with one button glowing amber" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Quiet in the room. Clear when it matters." })).toBeVisible();
   await page.getByRole("tab", { name: "Patient" }).click();
-  await expect(page.getByRole("tabpanel").last()).toContainText("Know when recording begins");
+  await expect(page.getByRole("tabpanel")).toContainText("Know when recording begins");
 });
 
 test("pilot form submits locally without collecting patient information", async ({ page }) => {

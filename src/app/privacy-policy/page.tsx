@@ -9,7 +9,7 @@ export default function PrivacyPolicyPage() {
     <main id="main-content">
       <PageHero eyebrow="Privacy Policy" path="/privacy-policy" title="Privacy Policy" description="How AiraLexo handles information across our website, connected services, and authorized WhatsApp Business integrations." />
       <section className="legal" aria-label="Privacy policy details">
-        <p><strong>Effective date:</strong> <time dateTime="2026-11-06">6 November 2026</time><br /><strong>Last updated:</strong> <time dateTime="2026-11-06">6 November 2026</time></p>
+        <p><strong>Effective date:</strong> <time dateTime="2026-11-06">6 November 2026</time><br /><strong>Last updated:</strong> <time dateTime="2026-11-19">19 November 2026</time></p>
 
         <h2>1. Who we are and what this policy covers</h2>
         <p>AiraLexo Solutions Private Limited provides software, hardware, and AI-enabled services. This policy covers airalexo.in, website pilot applications, and information processed through our connected services, including MediScript and the AiraLexo CRM Meta application (App ID 1777002823517781). MediScript supports doctors, clinics, and hospitals with clinical workflows and authorized WhatsApp Business communication. The information processed depends on the features a clinic enables and uses.</p>
@@ -41,7 +41,7 @@ export default function PrivacyPolicyPage() {
         <p>The WhatsApp feature is intended for permitted clinic communications, not for transmitting consultation recordings, transcripts, diagnoses, prescriptions, or treatment records. Messaging safeguards cannot guarantee that a person will never include sensitive information in free text. Patients should use the communication channel recommended by their clinic.</p>
 
         <h2>6. Storage, service providers, and security</h2>
-        <p>Our website is hosted on Vercel. The website application flow uses Supabase for database storage and Resend for application emails when configured. Plausible provides cookieless website analytics; our analytics events do not include applicant names, email addresses, phone numbers, free text, or application identifiers.</p>
+        <p>Our website is hosted on Vercel. The website application flow uses MongoDB Atlas for database storage and Resend for application emails when configured. Plausible provides cookieless website analytics; our analytics events do not include applicant names, email addresses, phone numbers, free text, or application identifiers.</p>
         <p>Connected services use Meta and WhatsApp for business authorization and message delivery. Depending on the enabled deployment and feature, MediScript uses MongoDB for service records, Cloudflare R2 for recording storage, and Google&apos;s Gemini services for transcription or AI-assisted documentation. Clinical processing providers are separate from Meta&apos;s WhatsApp messaging services.</p>
         <p>Implemented controls include authenticated and role-restricted access, clinic-scoped WhatsApp data operations, encrypted stored WhatsApp authorization tokens, and signature verification for incoming Meta webhooks. Website database credentials are used server-side. These controls reduce risk but cannot guarantee absolute security. We do not claim that information stored or processed within AiraLexo&apos;s systems is all end-to-end encrypted.</p>
 

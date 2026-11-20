@@ -43,7 +43,7 @@ export const site = {
   organizationId: `${siteUrl}/#organization`,
   websiteId: `${siteUrl}/#website`,
   logoUrl: `${siteUrl}/images/aira-logo-mark.png`,
-  socialImageUrl: `${siteUrl}/images/hero-device.png`,
+  socialImageUrl: `${siteUrl}/images/og-aira-desk.jpg`,
   pilotCities: ["Chennai", "Bengaluru", "Hyderabad", "Mumbai", "Coimbatore"],
   topics: [
     "consultation memory",
@@ -76,7 +76,7 @@ export function pageMetadata(title: string, description: string, path = ""): Met
       siteName: site.name,
       locale: site.locale,
       type: "website",
-      images: [{ url: site.socialImageUrl, width: 1400, height: 1200, alt: "Concept render of the Aira consultation recorder" }],
+      images: [{ url: site.socialImageUrl, width: 1200, height: 630, alt: "The Aira consultation recorder with its button glowing amber" }],
     },
     twitter: {
       card: "summary_large_image",

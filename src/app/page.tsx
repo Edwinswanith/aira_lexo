@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "@phosphor-icons/react/dist/ssr";
-import { DeviceStateSimulator, PerspectiveSwitcher, TrustStrip } from "@/components/interactions";
+import { PerspectiveSwitcher, TrustStrip } from "@/components/interactions";
 import { JsonLd } from "@/components/json-ld";
 import { pageMetadata, site, webPageJsonLd } from "@/lib/site";
 
@@ -86,11 +86,11 @@ export default function Home() {
             <Link className="hero-text-link" href="#how-it-works" prefetch={false}>See how Aira works <ArrowRight size={18} aria-hidden="true" /></Link>
           </div>
           <TrustStrip />
-          <p className="concept-note">Concept render. Final product may vary.</p>
+          <p className="concept-note">AI-generated image of the Aira recorder.</p>
         </div>
         <div className="hero-visual">
-          <div className="hero-image-shell">
-            <Image src="/images/hero-device.png" alt="Concept render of the compact black Aira recorder beside pale limestone" fill priority sizes="(max-width: 980px) 100vw, 50vw" />
+          <div className="hero-image-shell is-photo">
+            <Image src="/images/product/aira-ai-desk-natural-b-tall.webp" alt="The Aira recorder, a compact black device with one button glowing amber" fill priority sizes="(max-width: 980px) 100vw, 50vw" />
           </div>
         </div>
       </section>
@@ -145,12 +145,14 @@ export default function Home() {
       <section className="section">
         <div className="container split">
           <div>
-            <p className="eyebrow">Visible device states</p>
+            <p className="eyebrow">The ready light</p>
             <h2>Quiet in the room. Clear when it matters.</h2>
-            <p className="lead">A compact e-paper display and a single illuminated control communicate what the recorder is doing without turning the consultation into a screen-led experience.</p>
-            <p className="notice">These states describe the intended pilot experience. Final hardware behaviour will be validated before clinical deployment.</p>
+            <p className="lead">A single button glows amber when Aira is ready. One press starts capture after the patient agrees, and one press ends it, so the moment recording begins is never in doubt.</p>
           </div>
-          <DeviceStateSimulator />
+          <div className="photo-frame">
+            <Image src="/images/product/aira-ai-desk-natural-a.webp" alt="The Aira recorder on a consultation desk with its button glowing amber" fill sizes="(max-width: 980px) 100vw, 50vw" />
+            <span className="concept-label">AI-generated image</span>
+          </div>
         </div>
       </section>
 
