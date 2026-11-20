@@ -128,6 +128,13 @@ export function SpinViewer({ manifest, hotspots, label }: { manifest: SpinManife
       setOrigin(`${((event.clientX - rect.left) / rect.width) * 100}% ${((event.clientY - rect.top) / rect.height) * 100}%`);
       return;
     }
+    // With a mouse, moving across the photo turns the product: no click needed.
+    if (!drag.current && rect && !isSpin && event.pointerType === "mouse") {
+      const share = Math.min(0.999, Math.max(0, (event.clientX - rect.left) / rect.width));
+      const target = Math.floor(share * count);
+      if (target !== Math.round(position.current)) { stopAnimation(); setInteracted(true); show(target); }
+      return;
+    }
     if (!drag.current || !rect) return;
     const dx = event.clientX - drag.current.x;
     if (Math.abs(dx) > 4) { drag.current.moved = true; setInteracted(true); }
@@ -219,7 +226,7 @@ export function SpinViewer({ manifest, hotspots, label }: { manifest: SpinManife
             </button>
           );
         })}
-        {!interacted && <span className="spin-hint" aria-hidden="true">{isSpin ? "Drag to turn" : "Drag to see more angles"}</span>}
+        {!interacted && <span className="spin-hint" aria-hidden="true">{isSpin ? "Drag to turn" : "Move across or swipe to turn"}</span>}
         <span className="concept-label">{manifest.labels?.[visibleFrame] || (isSpin ? "Real product, photographed on a turntable" : "Real product photo. Background edited.")}</span>
       </div>
 
