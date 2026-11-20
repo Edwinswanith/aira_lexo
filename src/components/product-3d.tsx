@@ -172,6 +172,11 @@ export function Product3D({ features, label }: { features: Feature3D[]; label: s
       cue.rotation.x = -Math.PI / 2;
       cue.position.y = topY + 0.02;
       device.add(cue);
+      // One fixed, invisible target for both hover and click, so they always agree.
+      const hitArea = new THREE.Mesh(new THREE.CircleGeometry(0.27, 48), new THREE.MeshBasicMaterial({ visible: false }));
+      hitArea.rotation.x = -Math.PI / 2;
+      hitArea.position.y = topY + 0.075;
+      device.add(hitArea);
 
       // Charging-indicator pinhole near the far corner, on the same end as the port.
       const pin = new THREE.Mesh(new THREE.CircleGeometry(0.016, 20), new THREE.MeshBasicMaterial({ color: 0x020202 }));
@@ -239,11 +244,13 @@ export function Product3D({ features, label }: { features: Feature3D[]; label: s
         const rect = renderer.domElement.getBoundingClientRect();
         pointer.set(((event.clientX - rect.left) / rect.width) * 2 - 1, -((event.clientY - rect.top) / rect.height) * 2 + 1);
         raycaster.setFromCamera(pointer, camera);
-        return raycaster.intersectObjects([ring, cap, cue], false).length > 0;
+        return raycaster.intersectObjects([hitArea, ring, cap], false).length > 0;
       };
       const setHover = (value: boolean) => {
         if (value === hovering) return;
         hovering = value;
+        // Freeze the model exactly where it is, so the button cannot slide out from under the cursor.
+        if (value) { view.tYaw = view.yaw; view.tPitch = view.pitch; }
         renderer.domElement.style.cursor = value ? "pointer" : dragging ? "grabbing" : "grab";
         setHoverButton(value);
       };

@@ -2798,3 +2798,9 @@ button[aria-busy="true"] {
   from { opacity: 0; transform: translate(-50%, 6px); }
   to { opacity: 1; transform: translate(-50%, 0); }
 }
+
+.product-3d .spin-controls button {
+  width: auto;
+  padding: 0 18px;
+  white-space: nowrap;
+}
