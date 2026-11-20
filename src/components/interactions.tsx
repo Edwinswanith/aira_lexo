@@ -8,15 +8,6 @@ function track(name: string) {
   plausible?.(name);
 }
 
-const states = {
-  READY: "The device is available and waiting for a doctor to begin.",
-  REC: "A visible recording state supports clear consent and control.",
-  SAVED: "The consultation is stored locally before secure transfer.",
-  "SYNC PENDING": "The record is safe on the device until a connection is available.",
-  SYNCED: "The consultation is available for structured review in the app.",
-  ERROR: "A clear status helps the user understand what needs attention.",
-};
-
 export function TrustStrip() {
   return (
     <div className="trust-strip" aria-label="Aira product boundaries">
@@ -33,35 +24,6 @@ export function TrustStrip() {
           <span className="icon-disc"><ShieldCheck size={22} /></span>
           <strong>No autonomous diagnosis or prescribing</strong>
         </div>
-      </div>
-    </div>
-  );
-}
-
-export function DeviceStateSimulator() {
-  const [active, setActive] = useState<keyof typeof states>("READY");
-  const [hydrated, setHydrated] = useState(false);
-  useEffect(() => setHydrated(true), []);
-
-  return (
-    <div className="state-board">
-      <div className="state-screen" role="tabpanel" aria-live="polite">
-        <div><strong>{active}</strong><p>{states[active]}</p></div>
-      </div>
-      <div className="state-tabs" role="tablist" aria-label="Device states">
-        {Object.keys(states).map((state) => (
-          <button
-            className="state-tab"
-            type="button"
-            role="tab"
-            aria-selected={active === state}
-            key={state}
-            disabled={!hydrated}
-            onClick={() => { setActive(state as keyof typeof states); track("device_state_change"); }}
-          >
-            {state}
-          </button>
-        ))}
       </div>
     </div>
   );

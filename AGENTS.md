@@ -13,8 +13,8 @@ When implementing from a selected generated mock, treat that image as the source
 - Use Aira as the public brand and Aira Lexo Solutions Private Limited as the legal entity.
 - Keep the Founders page focused on people, responsibilities, biographies, and third-party profile verification. Do not show a public-brand, legal-entity, or role-review-date facts strip on that page.
 - Use warm porcelain, dark editorial typography, restrained violet, mint, and coral accents.
-- All product imagery must be marked as a concept render.
+- Product imagery uses the real retouched product photos in `public/images/product/`, labelled "Real product photo. Background edited." Any AI-generated image must be checked against the real product and labelled "AI-generated image". Do not reintroduce the old concept renders.
 - Public content must not contain an em dash character.
 - Claims must preserve doctor control and must not imply autonomous diagnosis or prescribing.
 - The public Aira logo mark is `public/images/aira-logo-mark.png`. Use the 256 px version in compact interface placements.
-- The photographs in `public/images/prototype/` show an early working prototype. Always identify it as an early prototype and explain that the visible Neura name was temporary. Do not present its interface, materials, naming, or enclosure as final.
+- The real product is a flat, pill-shaped, matte black 3D-printed recorder with a textured top, one central button that glows amber when ready, one USB-C port on a long side, a charging-indicator pinhole on the top, and a badge-holder slot on one end. It has no screen. The old Neura prototype photos were removed.

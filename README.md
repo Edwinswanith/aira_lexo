@@ -39,7 +39,7 @@ The scheduled Vercel job retries notification failures and deletes applications 
 
 - Use Aira in public headings.
 - Use Aira Lexo Solutions Private Limited in legal contexts.
-- Mark every product render with `Concept render. Final product may vary.`
+- Label real product photos `Real product photo. Background edited.` and any AI-generated image `AI-generated image`.
 - Do not claim autonomous diagnosis, prescribing, certification, compliance, accuracy, or clinical performance.
 - Keep health-related Insights unpublished until a named clinical reviewer, review date, and appropriate sources are present.
 
@@ -47,8 +47,7 @@ The scheduled Vercel job retries notification failures and deletes applications 
 
 - `public/images/aira-logo-mark.png` is the full-resolution transparent Aira mark.
 - `public/images/aira-logo-mark-256.png` is the compact website and browser-icon version.
-- `public/images/prototype/` contains supplied photographs of an early working hardware prototype.
-- The visible Neura name in prototype photographs was temporary. Public copy must keep it separate from the current Aira brand.
+- `public/images/product/` contains the retouched real product photos; `design/product-review/` holds the review rounds and originals' derivatives.
 
 ## Production launch checklist
 

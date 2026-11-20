@@ -2703,3 +2703,45 @@ button[aria-busy="true"] {
     aspect-ratio: 3 / 2;
   }
 }
+
+/* Real product photos on the homepage and product page */
+.hero-image-shell.is-photo {
+  background: #f2f0ea;
+}
+
+.hero-image-shell.is-photo img {
+  object-fit: cover;
+}
+
+.photo-caption {
+  margin: 12px 0 0;
+  color: var(--slate);
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  text-align: right;
+}
+
+.photo-frame {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  max-width: 100%;
+  overflow: hidden;
+  border-radius: 24px;
+  background: #f2f0ea;
+}
+
+.photo-frame img {
+  object-fit: cover;
+}
+
+.product-photo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+@media (max-width: 760px) {
+  .product-photo-grid {
+    grid-template-columns: 1fr;
+  }
+}
