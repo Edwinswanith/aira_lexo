@@ -40,7 +40,7 @@ const specs: Array<[string, string]> = [
   ["Charging", "USB-C, cable not included"],
   ["Carry", "Badge-holder slot at one end"],
   ["Case", "Matte black, textured top, 3D-printed"],
-  ["Works with", "Aira review app"],
+  ["Works with", "Aira review app, 6 months free"],
   ["Ships to", "Addresses within India"],
 ];
 
@@ -120,6 +120,9 @@ export default async function BuyPage() {
             <p className="eyebrow">In the box</p>
             <ul className="buy-list">{product.inTheBox.map((item) => <li key={item}>{item}</li>)}</ul>
             <p className="muted buy-not-included">{product.notIncluded}</p>
+            <p className="eyebrow buy-also-eyebrow">Also included</p>
+            <ul className="buy-list">{product.alsoIncluded.map((item) => <li key={item}>{item}</li>)}</ul>
+            <p className="muted buy-not-included">{product.appTermsNote}</p>
           </div>
           <div className="form-shell">
             <p className="eyebrow">Specifications</p>

@@ -34,6 +34,7 @@ export default async function CheckoutPage({ searchParams }: { searchParams: Pro
               imageAlt: product.imageAlt,
               inTheBox: [...product.inTheBox],
               notIncluded: product.notIncluded,
+              alsoIncluded: [...product.alsoIncluded],
             }}
             states={[...indianStates]}
             paymentsReady={isRazorpayConfigured()}
