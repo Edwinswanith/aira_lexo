@@ -32,7 +32,9 @@ export const RESERVATION_MINUTES = 30;
  * it stays hidden until STORE_ENABLED is set to "true" in Vercel Production.
  */
 export function isStoreEnabled() {
-  return process.env.VERCEL_ENV !== "production" || process.env.STORE_ENABLED === "true";
+  if (process.env.VERCEL_ENV !== "production") return true;
+  // Forgive common typing slips in the Vercel setting: "True", " true ", "yes", "1".
+  return ["true", "yes", "1", "on"].includes((process.env.STORE_ENABLED || "").trim().toLowerCase().replace(/^["']|["']$/g, ""));
 }
 
 export function orderTotals(quantity: number) {
