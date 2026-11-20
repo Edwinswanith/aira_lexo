@@ -10,6 +10,7 @@ import {
   insertOrder,
   markOrderPaid,
   newOrderNumber,
+  recordRefund,
   recordWebhookEvent,
   reserveStock,
   tokenMatches,
@@ -173,5 +174,58 @@ describe("orders", () => {
     const db = freshDb();
     expect(await recordWebhookEvent(db, "evt_1", "payment.captured")).toBe(true);
     expect(await recordWebhookEvent(db, "evt_1", "payment.captured")).toBe(false);
+  });
+
+  it("records a full refund once, from admin or Razorpay, and restocks unshipped units", async () => {
+    const db = freshDb();
+    const order = await placeOrder(db);
+    await markOrderPaid(db, payment());
+    expect(await availableStock(db)).toBe(8);
+
+    const first = await recordRefund(db, { paymentId: "pay_test_1" }, { id: "rfnd_1", amountPaise: order.amount_paise }, "razorpay dashboard");
+    expect(first.kind).toBe("refunded");
+    if (first.kind === "refunded") {
+      expect(first.order.status).toBe("refunded");
+      expect(first.order.refund?.id).toBe("rfnd_1");
+    }
+    expect(await availableStock(db)).toBe(10);
+
+    // The admin button and the webhook can both report the same refund.
+    const again = await recordRefund(db, { orderNumber: order.order_number }, { id: "rfnd_1", amountPaise: order.amount_paise }, "admin@example.com");
+    expect(again.kind).toBe("already_refunded");
+    expect(await availableStock(db)).toBe(10);
+  });
+
+  it("does not restock a shipped order on refund", async () => {
+    const db = freshDb();
+    const order = await placeOrder(db);
+    await markOrderPaid(db, payment());
+    await db.collection("orders").updateOne({ order_number: order.order_number }, { $set: { status: "shipped" } });
+    const outcome = await recordRefund(db, { orderNumber: order.order_number }, { id: "rfnd_2", amountPaise: order.amount_paise }, "admin@example.com");
+    expect(outcome.kind).toBe("refunded");
+    expect(await availableStock(db)).toBe(8);
+  });
+
+  it("flags a partial refund for a person to check instead of closing the order", async () => {
+    const db = freshDb();
+    const order = await placeOrder(db);
+    await markOrderPaid(db, payment());
+    const outcome = await recordRefund(db, { paymentId: "pay_test_1" }, { id: "rfnd_3", amountPaise: 100_000 }, "razorpay dashboard");
+    expect(outcome.kind).toBe("partial");
+    if (outcome.kind === "partial") {
+      expect(outcome.order.status).toBe("paid");
+      expect(outcome.order.needs_attention).toContain("Partial refund");
+    }
+    const repeat = await recordRefund(db, { paymentId: "pay_test_1" }, { id: "rfnd_3", amountPaise: 100_000 }, "razorpay dashboard");
+    expect(repeat.kind).toBe("partial");
+    if (repeat.kind === "partial") expect(repeat.order.events.filter((event) => event.type === "partial_refund")).toHaveLength(1);
+    expect(order.order_number).toBeTruthy();
+  });
+
+  it("ignores refunds for payments it does not know and orders that were never paid", async () => {
+    const db = freshDb();
+    expect((await recordRefund(db, { paymentId: "pay_unknown" }, { id: "rfnd_4", amountPaise: 100 }, "razorpay dashboard")).kind).toBe("not_found");
+    const order = await placeOrder(db);
+    expect((await recordRefund(db, { orderNumber: order.order_number }, { id: "rfnd_5", amountPaise: order.amount_paise }, "admin@example.com")).kind).toBe("not_refundable");
   });
 });

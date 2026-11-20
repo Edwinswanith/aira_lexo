@@ -36,6 +36,7 @@ export type Order = {
   shipment?: { courier: string; tracking_number: string; tracking_url: string | null; shipped_at: Date };
   delivered_at?: Date;
   refund?: { id: string; amount_paise: number; refunded_at: Date };
+  refund_email?: "sent" | "failed" | "not_configured";
   internal_note?: string;
   events: OrderEvent[];
 };
@@ -332,4 +333,70 @@ export async function salesSummary(db: Db, now = new Date()) {
 
 export async function setStock(db: Db, available: number, now = new Date()) {
   await inventory(db).updateOne({ _id: product.sku }, { $set: { available, updated_at: now } }, { upsert: true });
+}
+
+export type RefundOutcome =
+  | { kind: "refunded"; order: Order; previousStatus: OrderStatus }
+  | { kind: "already_refunded"; order: Order }
+  | { kind: "partial"; order: Order }
+  | { kind: "not_refundable"; order: Order }
+  | { kind: "not_found" };
+
+/**
+ * Records a refund against an order, whether it started in our admin or in the
+ * Razorpay dashboard. Safe to call twice for the same refund: only the first call
+ * changes the order. A full refund marks the order refunded and returns unshipped
+ * units to stock; a partial refund flags the order for a person to check.
+ */
+export async function recordRefund(
+  db: Db,
+  lookup: { orderNumber?: string; paymentId?: string },
+  refund: { id: string; amountPaise: number },
+  actor: string,
+  now = new Date(),
+): Promise<RefundOutcome> {
+  const filter = lookup.orderNumber ? { order_number: lookup.orderNumber } : { razorpay_payment_id: lookup.paymentId };
+  if (!lookup.orderNumber && !lookup.paymentId) return { kind: "not_found" };
+  const order = await orders(db).findOne(filter);
+  if (!order) return { kind: "not_found" };
+  if (order.status === "refunded") return { kind: "already_refunded", order };
+
+  const refundable: OrderStatus[] = ["paid", "packed", "shipped", "delivered"];
+  if (!refundable.includes(order.status)) return { kind: "not_refundable", order };
+
+  if (refund.amountPaise < order.amount_paise) {
+    // Razorpay can resend the same refund event; record each partial refund once.
+    if (order.events.some((event) => event.type === "partial_refund" && event.detail === refund.id)) return { kind: "partial", order };
+    const updated = await orders(db).findOneAndUpdate(
+      { _id: order._id },
+      {
+        $set: { needs_attention: `Partial refund ${refund.id} of Rs ${(refund.amountPaise / 100).toFixed(2)} made in Razorpay: check this order`, updated_at: now },
+        $push: { events: { at: now, type: "partial_refund", detail: refund.id } },
+      },
+      { returnDocument: "after" },
+    );
+    return { kind: "partial", order: updated || order };
+  }
+
+  const previousStatus = order.status;
+  const updated = await orders(db).findOneAndUpdate(
+    { _id: order._id, status: previousStatus },
+    {
+      $set: { status: "refunded", refund: { id: refund.id, amount_paise: refund.amountPaise, refunded_at: now }, updated_at: now },
+      $push: { events: { at: now, type: "refunded", detail: actor } },
+    },
+    { returnDocument: "after" },
+  );
+  if (!updated) {
+    // Someone else changed the order at the same moment; report what is there now.
+    const current = await orders(db).findOne({ _id: order._id });
+    return current?.status === "refunded" ? { kind: "already_refunded", order: current } : { kind: "not_refundable", order: current || order };
+  }
+  // Units that never left us go back into stock. Returned items are restocked by hand.
+  if (previousStatus === "paid" || previousStatus === "packed") await releaseStock(db, order.quantity);
+  return { kind: "refunded", order: updated, previousStatus };
+}
+
+export async function setRefundEmailStatus(db: Db, orderNumber: string, status: NonNullable<Order["refund_email"]>) {
+  await orders(db).updateOne({ order_number: orderNumber }, { $set: { refund_email: status } });
 }

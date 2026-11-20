@@ -4,6 +4,7 @@ import { ArrowRight } from "@phosphor-icons/react/dist/ssr";
 import { PerspectiveSwitcher, TrustStrip } from "@/components/interactions";
 import { JsonLd } from "@/components/json-ld";
 import { pageMetadata, site, webPageJsonLd } from "@/lib/site";
+import { isStoreEnabled } from "@/lib/store";
 
 const homeTitle = "AI consultation memory for doctors in India";
 const homeDescription = "Aira is a doctor-controlled AI consultation memory system for consent-first capture, structured draft review, and approved context at return visits.";
@@ -83,6 +84,7 @@ export default function Home() {
           <p className="lead hero-lead">Capture with consent. Review every draft.<br className="hero-line-break" /> Bring approved context back when the patient returns.</p>
           <div className="button-row">
             <Link className="button button-violet plausible-event-name=pilot_cta_click" href="/pilot" prefetch={false}>Join the Clinical Pilot</Link>
+            {isStoreEnabled() && <Link className="button button-secondary plausible-event-name=buy_cta_click" href="/buy" prefetch={false}>Buy Aira</Link>}
             <Link className="hero-text-link" href="#how-it-works" prefetch={false}>See how Aira works <ArrowRight size={18} aria-hidden="true" /></Link>
           </div>
           <TrustStrip />

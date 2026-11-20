@@ -3,6 +3,7 @@ import Script from "next/script";
 import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
 import { JsonLd } from "@/components/json-ld";
+import { isStoreEnabled } from "@/lib/store";
 import { absoluteUrl, founders, isIndexableDeployment, site } from "@/lib/site";
 import "./globals.css";
 
@@ -95,7 +96,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <body>
         <a className="skip-link" href="#main-content">Skip to main content</a>
         <JsonLd data={[websiteJsonLd, organizationJsonLd]} />
-        <Header />
+        <Header showBuy={isStoreEnabled()} />
         {children}
         <Footer />
         {plausibleDomain && (

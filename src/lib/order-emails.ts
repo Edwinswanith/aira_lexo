@@ -71,6 +71,29 @@ export async function sendOrderShippedEmail(order: Order) {
 }
 
 /** Sends a one-time admin sign-in link. */
+/** Tells the customer their refund has been processed and when to expect it. */
+export async function sendOrderRefundedEmail(order: Order): Promise<NonNullable<Order["refund_email"]>> {
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey || !order.refund) return "not_configured";
+  try {
+    const result = await new Resend(apiKey).emails.send({
+      from: "Aira Orders <orders@airalexo.in>",
+      to: order.customer.email,
+      replyTo: business.supportEmail,
+      subject: `Your refund for Aira order ${order.order_number}`,
+      html: `<p>Hello ${escapeHtml(order.customer.name)},</p><p>We have refunded <strong>${formatRupees(order.refund.amount_paise)}</strong> for your order <strong>${escapeHtml(order.order_number)}</strong> to the account you paid with.</p><p>Banks usually show the refund within 5 to 7 working days. If you do not see it after that, reply to this email with your order number and we will help.</p><p><strong>Refund reference:</strong> ${escapeHtml(order.refund.id)}</p><p>${escapeHtml(business.legalName)}</p>`,
+    });
+    if (result.error) {
+      console.error(`[order-email] refund email failed: ${result.error.name}: ${result.error.message}`);
+      return "failed";
+    }
+    return "sent";
+  } catch (error) {
+    console.error(`[order-email] refund email threw: ${error instanceof Error ? `${error.name}: ${error.message}` : "unknown error"}`);
+    return "failed";
+  }
+}
+
 export async function sendAdminLoginEmail(email: string, link: string) {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) {

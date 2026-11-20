@@ -8,8 +8,9 @@ import { z } from "zod";
 import { ADMIN_COOKIE, createLoginToken, endAdminSession, isAdminEmail, redeemLoginToken, requireAdmin } from "@/lib/admin-auth";
 import { getDatabase } from "@/lib/mongodb";
 import { sendAdminLoginEmail, sendOrderShippedEmail } from "@/lib/order-emails";
-import { addOrderNote, allowOrderAttempt, clearAttention, findOrderByNumber, releaseStock, setStock, transitionOrder } from "@/lib/orders";
+import { addOrderNote, allowOrderAttempt, clearAttention, findOrderByNumber, setStock, transitionOrder } from "@/lib/orders";
 import { refundRazorpayPayment } from "@/lib/razorpay";
+import { applyRefund } from "@/lib/order-refund";
 import { originFromHeaders } from "@/lib/request-origin";
 
 export async function requestLoginLink(formData: FormData) {
@@ -118,11 +119,8 @@ export async function refundOrder(formData: FormData) {
     redirect(orderPath(orderNumber, "Razorpay did not accept the refund. Check the payment in the Razorpay dashboard."));
   }
 
-  const updated = await transitionOrder(db, orderNumber, [order.status], "refunded", admin.email, {
-    refund: { id: refundId, amount_paise: order.amount_paise, refunded_at: new Date() },
-  });
-  // Units that never left us go back into stock. Returned items are restocked by hand.
-  if (updated && (order.status === "paid" || order.status === "packed")) await releaseStock(db, order.quantity);
+  // Records the refund, returns unshipped units to stock and emails the customer, once.
+  await applyRefund(db, { orderNumber }, { id: refundId, amountPaise: order.amount_paise }, admin.email);
 
   revalidatePath("/admin/orders");
   redirect(orderPath(orderNumber, `Refunded in full (${refundId}). The customer usually receives it in 5 to 7 working days.`));
