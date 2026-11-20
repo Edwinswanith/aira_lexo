@@ -2755,3 +2755,13 @@ button[aria-busy="true"] {
     grid-template-columns: 1fr;
   }
 }
+
+.buy-not-included,
+.checkout-not-included {
+  margin-top: 12px;
+  font-size: 13px;
+}
+
+.buy-also-eyebrow {
+  margin-top: 28px;
+}

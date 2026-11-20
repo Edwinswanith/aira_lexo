@@ -2,19 +2,26 @@ import { z } from "zod";
 
 /**
  * The single product sold on airalexo.in. Prices are in paise and include GST.
- * PLACEHOLDER: the price and box contents are dummy values for building and
- * testing. Replace them with the real details before launch.
+ * Price: Rs 9,999 before tax + 18% GST = Rs 11,798.82, sold at Rs 11,799.
+ * Box contents, 6 free app months and the setup call confirmed by the owner (2026-11-20).
  */
 export const product = {
   sku: "aira-recorder",
   name: "Aira consultation recorder",
-  shortDescription: "A compact, one-button consultation recorder that you control, with access to the Aira review app.",
-  unitPricePaise: 999_900,
+  shortDescription: "A compact, one-button consultation recorder that you control, with 6 months of the Aira review app free.",
+  /** Price before GST, shown to buyers as "Rs 9,999 + 18% GST". */
+  basePricePaise: 999_900,
+  unitPricePaise: 1_179_900,
   gstRatePercent: 18,
   maxQuantityPerOrder: 5,
   imagePath: "/images/product/aira-00-desk-lit.webp",
   imageAlt: "Aira recorder with its button lit amber",
-  inTheBox: ["Aira recorder", "USB-C charging cable", "Onboarding call with our team", "12 months of Aira review app access"],
+  inTheBox: ["Aira recorder", "Badge holder", "Quick-start card"],
+  /** Services that come with the purchase (confirmed by the owner, 2026-11-20). */
+  alsoIncluded: ["6 months of the Aira review app, free", "A setup call with our team"],
+  appTermsNote: "Before your 6 free months end, we will tell you the app price. You choose whether to continue.",
+  /** Shown before purchase so nobody expects these in the box. */
+  notIncluded: "USB-C cable and charger are not included. Use any standard USB-C cable and phone charger.",
 } as const;
 
 /** Orders hold stock for this long while the customer pays. */

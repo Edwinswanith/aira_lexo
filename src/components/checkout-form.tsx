@@ -14,6 +14,8 @@ type CheckoutProduct = {
   imagePath: string;
   imageAlt: string;
   inTheBox: string[];
+  notIncluded?: string;
+  alsoIncluded?: string[];
 };
 
 type RazorpaySuccess = { razorpay_order_id: string; razorpay_payment_id: string; razorpay_signature: string };
@@ -244,7 +246,8 @@ export function CheckoutForm({ product, states, paymentsReady, initialQuantity =
         </dl>
         <div className="checkout-box">
           <p className="eyebrow">In the box</p>
-          <ul>{product.inTheBox.map((item) => <li key={item}>{item}</li>)}</ul>
+          <ul>{[...product.inTheBox, ...(product.alsoIncluded || [])].map((item) => <li key={item}>{item}</li>)}</ul>
+          {product.notIncluded && <p className="muted checkout-not-included">{product.notIncluded}</p>}
         </div>
         <p className="muted checkout-policy">Dispatched in 2 to 3 working days. 7 day returns. 6 month warranty. Full refund if cancelled before dispatch.</p>
       </aside>

@@ -23,7 +23,7 @@ const manifest = gallery as SpinManifest;
 
 const hotspots: SpinHotspot[] = [
   { id: "button", title: "One-button control", text: "One press starts capture and one press ends it, so the moment recording begins is never in doubt. The button glows amber when Aira is ready to go." },
-  { id: "usb", title: "USB-C charging", text: "Charges over a standard USB-C cable, included in the box." },
+  { id: "usb", title: "USB-C charging", text: "Charges with any standard USB-C cable and phone charger. The cable and charger are not included in the box." },
   { id: "pinhole", title: "Charging indicator", text: "A small indicator on the top shows the charging status." },
   { id: "slot", title: "Badge-holder slot", text: "Thread a badge holder or lanyard through the slot at the end so the recorder stays with you between consultations." },
 ];
@@ -37,10 +37,10 @@ const features: Array<[string, string]> = [
 
 const specs: Array<[string, string]> = [
   ["Controls", "One button, glows amber when ready"],
-  ["Charging", "USB-C, with a charging indicator"],
+  ["Charging", "USB-C, cable not included"],
   ["Carry", "Badge-holder slot at one end"],
   ["Case", "Matte black, textured top, 3D-printed"],
-  ["Works with", "Aira review app (access included)"],
+  ["Works with", "Aira review app, 6 months free"],
   ["Ships to", "Addresses within India"],
 ];
 
@@ -70,7 +70,7 @@ export default async function BuyPage() {
             <p className="lead">{product.shortDescription}</p>
             <div className="buy-price">
               <strong>{formatRupees(product.unitPricePaise)}</strong>
-              <span>Inclusive of GST. Free delivery across India.</span>
+              <span>Inclusive of GST: {formatRupees(product.basePricePaise)} + {product.gstRatePercent}% GST. Free delivery across India.</span>
             </div>
             <p className={`buy-stock${soldOut ? " is-out" : ""}`}>
               {soldOut ? "Sold out. Contact us to be told when it is back." : stock !== null && stock <= 5 ? `In stock: only ${stock} left` : "In stock. Ships in 2 to 3 working days."}
@@ -82,7 +82,6 @@ export default async function BuyPage() {
               <li><ArrowCounterClockwise size={20} aria-hidden="true" />{storePolicy.returnWindowDays} day returns. {storePolicy.warrantyMonths} month warranty</li>
               <li><CheckCircle size={20} aria-hidden="true" />GST invoice available for clinics</li>
             </ul>
-            <p className="muted buy-placeholder-note">Price and box contents shown here are placeholders until launch.</p>
           </div>
         </div>
       </section>
@@ -120,6 +119,10 @@ export default async function BuyPage() {
           <div className="form-shell">
             <p className="eyebrow">In the box</p>
             <ul className="buy-list">{product.inTheBox.map((item) => <li key={item}>{item}</li>)}</ul>
+            <p className="muted buy-not-included">{product.notIncluded}</p>
+            <p className="eyebrow buy-also-eyebrow">Also included</p>
+            <ul className="buy-list">{product.alsoIncluded.map((item) => <li key={item}>{item}</li>)}</ul>
+            <p className="muted buy-not-included">{product.appTermsNote}</p>
           </div>
           <div className="form-shell">
             <p className="eyebrow">Specifications</p>

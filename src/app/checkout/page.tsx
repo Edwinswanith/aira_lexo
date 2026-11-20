@@ -21,7 +21,7 @@ export default async function CheckoutPage({ searchParams }: { searchParams: Pro
       <section className="section checkout-section">
         <div className="container">
           {isRazorpayTestMode() && (
-            <p className="checkout-test-banner" role="note">TEST MODE. No real money is charged. Price and box contents are placeholders.</p>
+            <p className="checkout-test-banner" role="note">TEST MODE. No real money is charged.</p>
           )}
           <CheckoutForm
             product={{
@@ -33,6 +33,8 @@ export default async function CheckoutPage({ searchParams }: { searchParams: Pro
               imagePath: product.imagePath,
               imageAlt: product.imageAlt,
               inTheBox: [...product.inTheBox],
+              notIncluded: product.notIncluded,
+              alsoIncluded: [...product.alsoIncluded],
             }}
             states={[...indianStates]}
             paymentsReady={isRazorpayConfigured()}
