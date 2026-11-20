@@ -86,7 +86,6 @@ export default function Home() {
             <Link className="hero-text-link" href="#how-it-works" prefetch={false}>See how Aira works <ArrowRight size={18} aria-hidden="true" /></Link>
           </div>
           <TrustStrip />
-          <p className="concept-note">AI-generated image of the Aira recorder.</p>
         </div>
         <div className="hero-visual">
           <div className="hero-image-shell is-photo">
@@ -151,7 +150,6 @@ export default function Home() {
           </div>
           <div className="photo-frame">
             <Image src="/images/product/aira-ai-desk-natural-a.webp" alt="The Aira recorder on a consultation desk with its button glowing amber" fill sizes="(max-width: 980px) 100vw, 50vw" />
-            <span className="concept-label">AI-generated image</span>
           </div>
         </div>
       </section>
