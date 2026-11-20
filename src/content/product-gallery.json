@@ -1,137 +1,72 @@
 {
- "placeholder": false,
  "mode": "angles",
- "frameCount": 10,
+ "frameCount": 4,
  "frames": [
-  "/images/product/aira-00-desk-lit.webp",
-  "/images/product/aira-01-desk-side.webp",
-  "/images/product/aira-09-coat-pocket.webp",
-  "/images/product/aira-02-front-usb-c.webp",
-  "/images/product/aira-03-three-quarter-usb-c.webp",
-  "/images/product/aira-04-top-angled.webp",
-  "/images/product/aira-05-top.webp",
-  "/images/product/aira-06-end-badge-slot.webp",
-  "/images/product/aira-07-underside.webp",
-  "/images/product/aira-08-ai-usb-c-side.webp"
- ],
- "thumbs": [
-  "/images/product/thumb-00-desk-lit.webp",
-  "/images/product/thumb-01-desk-side.webp",
-  "/images/product/thumb-09-coat-pocket.webp",
-  "/images/product/thumb-02-front-usb-c.webp",
-  "/images/product/thumb-03-three-quarter-usb-c.webp",
-  "/images/product/thumb-04-top-angled.webp",
-  "/images/product/thumb-05-top.webp",
-  "/images/product/thumb-06-end-badge-slot.webp",
-  "/images/product/thumb-07-underside.webp",
-  "/images/product/thumb-08-ai-usb-c-side.webp"
+  "/images/product/spin-00-top.webp",
+  "/images/product/spin-01-front-right.webp",
+  "/images/product/spin-02-front-left.webp",
+  "/images/product/spin-03-side.webp"
  ],
  "alts": [
-  "Aira recorder with its button lit amber on an oak consultation desk",
-  "Aira recorder side view on an oak desk, button lit amber",
-  "Aira recorder tucked into the breast pocket of a doctor's white coat",
-  "Aira recorder front view showing the USB-C port",
-  "Aira recorder at an angle showing the USB-C port",
-  "Aira recorder top surface at an angle",
-  "Aira recorder seen from above",
-  "Aira recorder end view showing the badge-holder slot",
-  "Aira recorder underside with the USB-C port",
-  "AI-generated studio image of the Aira recorder showing the USB-C side"
+  "The Aira recorder seen from above, with its single button and charging indicator",
+  "The Aira recorder from the front right, showing the USB-C port",
+  "The Aira recorder from the front left, showing the USB-C port and the badge-holder slot",
+  "The Aira recorder side view, showing the USB-C port in its recess"
+ ],
+ "labels": [
+  "AI-generated image",
+  "AI-generated image",
+  "AI-generated image",
+  "AI-generated image"
  ],
  "hotspots": [
   {
    "button": [
-    63.5,
-    56.6
-   ],
-   "usb": [
-    68.0,
-    64.6
-   ]
-  },
-  {
-   "button": [
-    63.0,
-    56.1
-   ],
-   "usb": [
-    68.8,
-    63.0
-   ]
-  },
-  {},
-  {
-   "button": [
-    50.7,
-    40
-   ],
-   "usb": [
-    62,
-    55
-   ],
-   "slot": [
-    23,
-    55
-   ]
-  },
-  {
-   "button": [
-    49.5,
-    41
-   ],
-   "usb": [
-    56.9,
-    57.5
-   ]
-  },
-  {
-   "button": [
-    48.5,
-    40
-   ],
-   "pinhole": [
-    60.5,
-    55
-   ]
-  },
-  {
-   "button": [
     50,
-    48
+    51
    ],
    "pinhole": [
-    58.5,
-    65
+    69,
+    37
    ]
   },
   {
    "button": [
-    48.7,
-    38
+    52.2,
+    45.2
    ],
-   "slot": [
-    40,
-    70
+   "usb": [
+    67,
+    58
+   ],
+   "pinhole": [
+    66,
+    30
    ]
   },
   {
+   "button": [
+    49.3,
+    47.9
+   ],
    "usb": [
-    40.6,
+    66,
+    57
+   ],
+   "slot": [
+    21,
     62
    ]
   },
-  {}
- ],
- "labels": [
-  "Real product photo. Background added.",
-  "Real product photo. Background added.",
-  "Real product photo. Scene added.",
-  "Real product photo. Background edited.",
-  "Real product photo. Background edited.",
-  "Real product photo. Background edited.",
-  "Real product photo. Background edited.",
-  "Real product photo. Background edited.",
-  "Real product photo. Background edited.",
-  "AI-generated image"
+  {
+   "button": [
+    51,
+    44
+   ],
+   "usb": [
+    64,
+    51
+   ]
+  }
  ]
 }
