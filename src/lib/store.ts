@@ -3,12 +3,12 @@ import { z } from "zod";
 /**
  * The single product sold on airalexo.in. Prices are in paise and include GST.
  * Price: Rs 9,999 before tax + 18% GST = Rs 11,798.82, sold at Rs 11,799.
- * PLACEHOLDER: the box contents are still dummy values. Replace before launch.
+ * Box contents confirmed by the owner (2026-11-20). App access and onboarding are not yet promised.
  */
 export const product = {
   sku: "aira-recorder",
   name: "Aira consultation recorder",
-  shortDescription: "A compact, one-button consultation recorder that you control, with access to the Aira review app.",
+  shortDescription: "A compact, one-button consultation recorder that you control, built to work with the Aira review app.",
   /** Price before GST, shown to buyers as "Rs 9,999 + 18% GST". */
   basePricePaise: 999_900,
   unitPricePaise: 1_179_900,
@@ -16,7 +16,9 @@ export const product = {
   maxQuantityPerOrder: 5,
   imagePath: "/images/product/aira-00-desk-lit.webp",
   imageAlt: "Aira recorder with its button lit amber",
-  inTheBox: ["Aira recorder", "USB-C charging cable", "Onboarding call with our team", "12 months of Aira review app access"],
+  inTheBox: ["Aira recorder", "Badge holder", "Quick-start card"],
+  /** Shown before purchase so nobody expects these in the box. */
+  notIncluded: "USB-C cable and charger are not included. Use any standard USB-C cable and phone charger.",
 } as const;
 
 /** Orders hold stock for this long while the customer pays. */
