@@ -86,11 +86,11 @@ export default function Home() {
             <Link className="hero-text-link" href="#how-it-works" prefetch={false}>See how Aira works <ArrowRight size={18} aria-hidden="true" /></Link>
           </div>
           <TrustStrip />
-          <p className="concept-note">Real product photo. Background added.</p>
+          <p className="concept-note">AI-generated image of the Aira recorder.</p>
         </div>
         <div className="hero-visual">
           <div className="hero-image-shell is-photo">
-            <Image src="/images/product/aira-hero-desk-tall.webp" alt="The Aira recorder, a compact black device with one button glowing amber" fill priority sizes="(max-width: 980px) 100vw, 50vw" />
+            <Image src="/images/product/aira-ai-desk-natural-b-tall.webp" alt="The Aira recorder, a compact black device with one button glowing amber" fill priority sizes="(max-width: 980px) 100vw, 50vw" />
           </div>
         </div>
       </section>
@@ -150,8 +150,8 @@ export default function Home() {
             <p className="lead">A single button glows amber when Aira is ready. One press starts capture after the patient agrees, and one press ends it, so the moment recording begins is never in doubt.</p>
           </div>
           <div className="photo-frame">
-            <Image src="/images/product/aira-01-desk-side.webp" alt="The Aira recorder seen from the side with its button glowing amber" fill sizes="(max-width: 980px) 100vw, 50vw" />
-            <span className="concept-label">Real product photo. Background added.</span>
+            <Image src="/images/product/aira-ai-desk-natural-a.webp" alt="The Aira recorder on a consultation desk with its button glowing amber" fill sizes="(max-width: 980px) 100vw, 50vw" />
+            <span className="concept-label">AI-generated image</span>
           </div>
         </div>
       </section>
