@@ -21,7 +21,7 @@ const FEATURE_VIEWS: Record<Feature3D["id"], [number, number]> = {
  */
 export function Product3D({ features, label }: { features: Feature3D[]; label: string }) {
   const mount = useRef<HTMLDivElement>(null);
-  const api = useRef<{ setLit: (on: boolean) => void; goTo: (view: [number, number]) => void; nudge: (dYaw: number) => void } | null>(null);
+  const api = useRef<{ setLit: (on: boolean) => void; goTo: (view: [number, number]) => void; nudge: (dYaw: number, dPitch?: number) => void } | null>(null);
   const [lit, setLit] = useState(false);
   const [hoverButton, setHoverButton] = useState(false);
   const [failed, setFailed] = useState(false);
@@ -132,6 +132,11 @@ export function Product3D({ features, label }: { features: Feature3D[]; label: s
       const plateTop = black({ bumpMap: pebble, bumpScale: 5, roughness: 0.92, color: 0x0d0d0d });
       const plate = new THREE.Mesh(plateGeo, [plateTop, black({ color: 0x0e0e0e })]);
       device.add(plate);
+      const underGeo = new THREE.ExtrudeGeometry(stadium(L - 0.13, W - 0.13), { depth: 0.03, bevelEnabled: true, bevelThickness: 0.01, bevelSize: 0.01, bevelSegments: 3, curveSegments: 48 });
+      underGeo.rotateX(Math.PI / 2);
+      underGeo.translate(0, -H / 2 + 0.012, 0);
+      const underside = new THREE.Mesh(underGeo, [black({ bumpMap: pebble, bumpScale: 4, roughness: 0.92, color: 0x0d0d0d }), black({ color: 0x0e0e0e })]);
+      device.add(underside);
       const topY = H / 2 + 0.06;
 
       // Centre button: off-white ring with a raised off-white cap. The ring carries the amber LED.
@@ -227,15 +232,24 @@ export function Product3D({ features, label }: { features: Feature3D[]; label: s
         transparent: true, depthWrite: false,
       }));
       shadow.rotation.x = -Math.PI / 2;
-      shadow.position.y = -H / 2 - 0.01;
-      device.add(shadow);
+      shadow.position.y = -1.05;
+      shadow.scale.set(0.9, 0.9, 1);
+      scene.add(shadow);
 
       // ---------- interaction ----------
-      const view = { yaw: -0.5, pitch: 0.55, tYaw: -0.5, tPitch: 0.55 };
+      // Free rotation in every direction: the device turns the way the cursor or finger moves.
+      const target = new THREE.Quaternion().setFromEuler(new THREE.Euler(0.55, -0.5, 0, "XYZ"));
+      model.quaternion.copy(target);
+      const AXIS_X = new THREE.Vector3(1, 0, 0), AXIS_Y = new THREE.Vector3(0, 1, 0);
+      const turn = (dx: number, dy: number) => {
+        target.premultiply(new THREE.Quaternion().setFromAxisAngle(AXIS_Y, dx));
+        target.premultiply(new THREE.Quaternion().setFromAxisAngle(AXIS_X, dy));
+        target.normalize();
+      };
+      let lastPointer: { x: number; y: number } | null = null;
       let hovering = false;
-      let held = false;
       let glowLevel = 0;
-      let dragging: { x: number; y: number; yaw: number; pitch: number; moved: boolean } | null = null;
+      let dragging: { x: number; y: number; moved: boolean } | null = null;
       const pointer = new THREE.Vector2();
       const raycaster = new THREE.Raycaster();
       const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -250,36 +264,36 @@ export function Product3D({ features, label }: { features: Feature3D[]; label: s
         if (value === hovering) return;
         hovering = value;
         // Freeze the model exactly where it is, so the button cannot slide out from under the cursor.
-        if (value) { view.tYaw = view.yaw; view.tPitch = view.pitch; }
+        if (value) target.copy(model.quaternion);
         renderer.domElement.style.cursor = value ? "pointer" : dragging ? "grabbing" : "grab";
         setHoverButton(value);
       };
 
       const onMove = (event: PointerEvent) => {
         const rect = renderer.domElement.getBoundingClientRect();
-        const fx = (event.clientX - rect.left) / rect.width;
-        const fy = (event.clientY - rect.top) / rect.height;
+        const prev = lastPointer;
+        lastPointer = { x: event.clientX, y: event.clientY };
         setHover(hitButton(event));
+        if (!prev) return;
+        // One full turn per width of the stage, half a turn per height.
+        const dx = ((event.clientX - prev.x) / rect.width) * Math.PI * 2;
+        const dy = ((event.clientY - prev.y) / rect.height) * Math.PI * 1.4;
         if (dragging) {
-          const dx = event.clientX - dragging.x, dy = event.clientY - dragging.y;
-          if (Math.abs(dx) + Math.abs(dy) > 4) dragging.moved = true;
-          view.tYaw = dragging.yaw + (dx / rect.width) * Math.PI * 2;
-          view.tPitch = Math.min(1.35, Math.max(-0.35, dragging.pitch + (dy / rect.height) * 1.6));
+          if (Math.abs(event.clientX - dragging.x) + Math.abs(event.clientY - dragging.y) > 4) dragging.moved = true;
+          turn(dx, dy);
           return;
         }
-        // Mouse: the cursor position steers the view, one full turn across the width.
-        // While the cursor rests on the button the view holds still so it can be clicked.
-        if (event.pointerType === "mouse" && !hovering && !held) {
-          view.tYaw = (fx - 0.5) * Math.PI * 2;
-          view.tPitch = 0.15 + (1 - fy) * 0.95;
+        // Mouse: simply moving across the stage turns it. Resting on the button holds it still for a click.
+        if (event.pointerType === "mouse" && !hovering) {
+          turn(dx, dy);
           setInteracted(true);
         }
       };
       const onDown = (event: PointerEvent) => {
+        lastPointer = { x: event.clientX, y: event.clientY };
         if (event.pointerType !== "mouse" || !hitButton(event)) {
-          dragging = { x: event.clientX, y: event.clientY, yaw: view.tYaw, pitch: view.tPitch, moved: false };
+          dragging = { x: event.clientX, y: event.clientY, moved: false };
           renderer.domElement.setPointerCapture(event.pointerId);
-          held = false;
         }
       };
       const onUp = (event: PointerEvent) => {
@@ -291,7 +305,7 @@ export function Product3D({ features, label }: { features: Feature3D[]; label: s
         }
         setInteracted(true);
       };
-      const onLeave = () => setHover(false);
+      const onLeave = () => { setHover(false); lastPointer = null; };
       renderer.domElement.addEventListener("pointermove", onMove);
       renderer.domElement.addEventListener("pointerdown", onDown);
       renderer.domElement.addEventListener("pointerup", onUp);
@@ -300,8 +314,8 @@ export function Product3D({ features, label }: { features: Feature3D[]; label: s
 
       api.current = {
         setLit: (on) => { litRef.current = on; setLit(on); },
-        goTo: ([yaw, pitch]) => { held = true; view.tYaw = yaw; view.tPitch = pitch; },
-        nudge: (d) => { held = true; view.tYaw += d; },
+        goTo: ([yaw, pitch]) => { target.setFromEuler(new THREE.Euler(pitch, yaw, 0, "XYZ")); },
+        nudge: (dYaw, dPitch = 0) => turn(dYaw, dPitch),
       };
 
       const resize = () => {
@@ -329,13 +343,11 @@ export function Product3D({ features, label }: { features: Feature3D[]; label: s
         const dt = Math.min(0.05, (now - last) / 1000);
         last = now;
         const ease = reduced ? 1 : 1 - Math.pow(0.0008, dt);
-        view.yaw += (view.tYaw - view.yaw) * ease;
-        view.pitch += (view.tPitch - view.pitch) * ease;
-        model.rotation.set(view.pitch, view.yaw, 0, "XYZ");
+        model.quaternion.slerp(target, ease);
 
         // LED: fade on and off like a real illuminated push button.
-        const target = litRef.current ? 1 : 0;
-        glowLevel += (target - glowLevel) * (reduced ? 1 : 1 - Math.pow(0.004, dt));
+        const litTarget = litRef.current ? 1 : 0;
+        glowLevel += (litTarget - glowLevel) * (reduced ? 1 : 1 - Math.pow(0.004, dt));
         const flicker = litRef.current ? 1 + Math.sin(now / 900) * 0.03 : 1;
         ringMat.emissiveIntensity = 1.5 * glowLevel * flicker;
         capMat.emissiveIntensity = 0.28 * glowLevel;
@@ -390,11 +402,13 @@ export function Product3D({ features, label }: { features: Feature3D[]; label: s
       <div
         className={`spin-stage product-3d-stage${lit ? " is-lit" : ""}`}
         role="img"
-        aria-label={`${label}. Interactive 3D model. Move the pointer or use the arrow keys to turn it. Press Enter to switch the ready light ${lit ? "off" : "on"}.`}
+        aria-label={`${label}. Interactive 3D model. Move the pointer, drag, or use the arrow keys to turn it in any direction. Press Enter to switch the ready light ${lit ? "off" : "on"}.`}
         tabIndex={0}
         onKeyDown={(event) => {
           if (event.key === "ArrowRight") { event.preventDefault(); api.current?.nudge(0.35); }
           if (event.key === "ArrowLeft") { event.preventDefault(); api.current?.nudge(-0.35); }
+          if (event.key === "ArrowUp") { event.preventDefault(); api.current?.nudge(0, -0.35); }
+          if (event.key === "ArrowDown") { event.preventDefault(); api.current?.nudge(0, 0.35); }
           if (event.key === "Enter" || event.key === " ") { event.preventDefault(); api.current?.setLit(!lit); }
         }}
       >
@@ -403,7 +417,7 @@ export function Product3D({ features, label }: { features: Feature3D[]; label: s
           // eslint-disable-next-line @next/next/no-img-element -- plain fallback when 3D is unavailable
           <img className="spin-frame" src="/images/product/aira-13-lit-plain.webp" alt="" />
         )}
-        {!interacted && !failed && <span className="spin-hint" aria-hidden="true">Move to turn. Click the button to light it.</span>}
+        {!interacted && !failed && <span className="spin-hint" aria-hidden="true">Move in any direction to turn it. Click the button to light it.</span>}
         {hoverButton && <span className="product-3d-tip" aria-hidden="true">{lit ? "Click to switch off" : "Click to switch on"}</span>}
         <span className="concept-label">{failed ? "Real product photo. Background edited." : "3D model of the real recorder. Not a photo."}</span>
       </div>
