@@ -33,12 +33,14 @@ export async function POST(request: NextRequest) {
   let networkHash: string;
   try {
     networkHash = hashNetworkIdentifier(networkIdentifier(request));
-  } catch {
+  } catch (error) {
+    logFailure("network-hash (check IP_HASH_SECRET)", error);
     return NextResponse.json({ status: "unavailable" }, { status: 500 });
   }
 
   const isProduction = process.env.VERCEL_ENV === "production";
   if (!isDatabaseConfigured() && isProduction) {
+    logFailure("config (MONGODB_URI is not set for this environment)");
     return NextResponse.json({ status: "unavailable" }, { status: 500 });
   }
 
@@ -47,7 +49,10 @@ export async function POST(request: NextRequest) {
   if (isDatabaseConfigured()) {
     try {
       const db = await getDatabase();
-      if (!db) return NextResponse.json({ status: "unavailable" }, { status: 500 });
+      if (!db) {
+        logFailure("database (no connection)");
+        return NextResponse.json({ status: "unavailable" }, { status: 500 });
+      }
 
       if (!(await allowSubmission(db, networkHash))) {
         return NextResponse.json({ status: "rate_limited" }, { status: 429 });
@@ -60,7 +65,8 @@ export async function POST(request: NextRequest) {
       const notification = await sendPilotNotifications(parsed.data, responseStatus);
       await setNotificationStatus(db, id, notification.sent ? "sent" : "retry");
       return NextResponse.json({ status: responseStatus }, { status: 201 });
-    } catch {
+    } catch (error) {
+      logFailure("database (connect, read or write)", error);
       return NextResponse.json({ status: "unavailable" }, { status: 500 });
     }
   }
@@ -74,4 +80,10 @@ export async function POST(request: NextRequest) {
   localSubmissions.set(networkHash, [...recent, now]);
   localEmails.set(parsed.data.email, now);
   return NextResponse.json({ status: responseStatus }, { status: 201 });
+}
+
+/** Logs only the failing step and the error's name and message, never form data or secrets. */
+function logFailure(step: string, error?: unknown) {
+  const detail = error instanceof Error ? `${error.name}: ${error.message}` : "";
+  console.error(`[pilot-applications] failed at ${step}${detail ? ` | ${detail}` : ""}`);
 }

@@ -1,7 +1,11 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { business } from "@/lib/business";
 import { FormEvent, useRef, useState } from "react";
+
+const supportEmail = business.supportEmail;
+const fieldOrder = ["fullName", "email", "phone", "role", "specialty", "organization", "city", "otherCity", "dailyPatientVolume", "documentationMethod", "repeatVisitShare", "pilotInterest", "consentToContact"];
 
 type FormErrors = Record<string, string>;
 
@@ -65,25 +69,34 @@ export function PilotApplicationForm() {
       });
       const result = await response.json();
       if (response.status === 400) {
-        setErrors(result.errors || {});
-        setFormError(result.errors?.form || "Check the highlighted fields and try again.");
+        const fieldErrors: FormErrors = result.errors || {};
+        setErrors(fieldErrors);
+        const count = fieldOrder.filter((field) => fieldErrors[field]).length;
+        setFormError(fieldErrors.form || (count === 1 ? "One answer needs fixing. It is marked in red above." : `${count} answers need fixing. They are marked in red above.`));
+        // Take the person to the first answer that needs fixing.
+        const first = fieldOrder.find((field) => fieldErrors[field]);
+        if (first) window.setTimeout(() => {
+          const element = document.getElementById(first);
+          element?.scrollIntoView({ behavior: "smooth", block: "center" });
+          element?.focus({ preventScroll: true });
+        }, 50);
         track("pilot_form_error");
         return;
       }
       if (response.status === 429) {
-        setFormError("We have received several applications from this network. Please try again in 15 minutes.");
+        setFormError("We have received several applications from your network. Please wait 15 minutes and try again.");
         track("pilot_form_error");
         return;
       }
       if (!response.ok) {
-        setFormError("We could not save your application right now. Please try again shortly.");
+        setFormError(`Sorry, something went wrong on our side and your application was not saved. Please try again in a few minutes, or email us at ${supportEmail}.`);
         track("pilot_form_error");
         return;
       }
       track(result.status === "future_access" ? "future_access_submit" : "pilot_form_submit");
       router.push(`/pilot/thanks?status=${encodeURIComponent(result.status)}`);
     } catch {
-      setFormError("We could not connect to the application service. Please try again shortly.");
+      setFormError("We could not reach our server. Please check your internet connection and try again.");
       track("pilot_form_error");
     } finally {
       setPending(false);
@@ -100,8 +113,7 @@ export function PilotApplicationForm() {
         <h2 style={{ fontSize: "clamp(2.2rem, 4vw, 3.5rem)" }}>Tell us about your practice.</h2>
         <p className="muted">Do not enter patient names or medical information.</p>
       </div>
-      {formError && <div className="form-status error" role="alert">{formError}</div>}
-      <div className="form-grid">
+            <div className="form-grid">
         <div className="field"><label htmlFor="fullName">Full name</label><input id="fullName" name="fullName" autoComplete="name" aria-invalid={Boolean(errors.fullName)} aria-describedby={describedBy("fullName")} required />{error("fullName")}</div>
         <div className="field"><label htmlFor="email">Work email</label><input id="email" name="email" type="email" autoComplete="email" aria-invalid={Boolean(errors.email)} aria-describedby={describedBy("email")} required />{error("email")}</div>
         <div className="field"><label htmlFor="phone">Phone, optional</label><input id="phone" name="phone" type="tel" autoComplete="tel" aria-invalid={Boolean(errors.phone)} aria-describedby={describedBy("phone")} />{error("phone")}</div>
@@ -120,7 +132,10 @@ export function PilotApplicationForm() {
           <label className="checkbox-row" htmlFor="consentToContact"><input id="consentToContact" name="consentToContact" type="checkbox" aria-invalid={Boolean(errors.consentToContact)} aria-describedby={describedBy("consentToContact")} required /><span>I have read the privacy notice and agree that Aira may contact me about this pilot application.</span></label>
           {error("consentToContact")}
         </div>
-        <div className="field full"><button className="button button-violet" type="submit" disabled={pending}>{pending ? "Sending application" : "Submit application"}</button></div>
+        <div className="field full">
+          {formError && <div className="form-status error near-submit" role="alert">{formError}</div>}
+          <button className="button button-violet" type="submit" disabled={pending} aria-busy={pending}>{pending ? "Sending your application..." : "Submit application"}</button>
+        </div>
       </div>
     </form>
   );
