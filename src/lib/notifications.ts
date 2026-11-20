@@ -8,7 +8,11 @@ function escapeHtml(value: string) {
 export async function sendPilotNotifications(application: PilotApplicationRequest, status: "received" | "future_access") {
   const apiKey = process.env.RESEND_API_KEY;
   const teamEmail = process.env.PILOT_NOTIFICATION_EMAIL;
-  if (!apiKey || !teamEmail) return { sent: false as const, reason: "not_configured" as const };
+  if (!apiKey || !teamEmail) {
+    const missing = [!apiKey && "RESEND_API_KEY", !teamEmail && "PILOT_NOTIFICATION_EMAIL"].filter(Boolean).join(", ");
+    console.error(`[pilot-email] not sent: missing ${missing} for this environment`);
+    return { sent: false as const, reason: "not_configured" as const };
+  }
 
   const resend = new Resend(apiKey);
   const name = escapeHtml(application.fullName);
@@ -33,8 +37,12 @@ export async function sendPilotNotifications(application: PilotApplicationReques
       html: `<p>Hello ${name},</p><p>${applicantMessage}</p><p>Please do not send patient names, medical information, or consultation recordings by email.</p><p>Aira Lexo Solutions Private Limited</p>`,
       }),
     ]);
+    // Log only the provider's error name and message, never the email content.
+    if (teamResult.error) console.error(`[pilot-email] team alert failed: ${teamResult.error.name}: ${teamResult.error.message}`);
+    if (applicantResult.error) console.error(`[pilot-email] applicant confirmation failed: ${applicantResult.error.name}: ${applicantResult.error.message}`);
     return { sent: !teamResult.error && !applicantResult.error };
-  } catch {
+  } catch (error) {
+    console.error(`[pilot-email] send threw: ${error instanceof Error ? `${error.name}: ${error.message}` : "unknown error"}`);
     return { sent: false as const };
   }
 }
