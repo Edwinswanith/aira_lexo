@@ -39,8 +39,10 @@ export async function sendOrderPaidEmails(order: Order, statusUrl?: string): Pro
       }));
     }
     const results = await Promise.all(sends);
+    results.forEach((result) => { if (result.error) console.error(`[order-email] paid email failed: ${result.error.name}: ${result.error.message}`); });
     return results.every((result) => !result.error) ? "sent" : "failed";
-  } catch {
+  } catch (error) {
+    console.error(`[order-email] paid email threw: ${error instanceof Error ? `${error.name}: ${error.message}` : "unknown error"}`);
     return "failed";
   }
 }
@@ -60,8 +62,10 @@ export async function sendOrderShippedEmail(order: Order) {
       subject: `Your Aira order ${order.order_number} has shipped`,
       html: `<p>Hello ${escapeHtml(order.customer.name)},</p><p>Your order <strong>${escapeHtml(order.order_number)}</strong> is on its way.</p><p><strong>Courier:</strong> ${escapeHtml(order.shipment.courier)}<br><strong>Tracking number:</strong> ${tracking}</p><p>Delivery usually takes 3 to 7 working days. Questions? Reply to this email or call ${escapeHtml(business.supportPhone)}.</p><p>${escapeHtml(business.legalName)}</p>`,
     });
+    if (result.error) console.error(`[order-email] shipped email failed: ${result.error.name}: ${result.error.message}`);
     return !result.error;
-  } catch {
+  } catch (error) {
+    console.error(`[order-email] shipped email threw: ${error instanceof Error ? `${error.name}: ${error.message}` : "unknown error"}`);
     return false;
   }
 }
