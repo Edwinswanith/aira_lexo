@@ -3,9 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CheckCircle, ShieldCheck, Truck, ArrowCounterClockwise } from "@phosphor-icons/react/dist/ssr";
-import gallery from "@/content/product-gallery.json";
 import { BuyPanel } from "@/components/buy-panel";
-import { SpinViewer, type SpinHotspot, type SpinManifest } from "@/components/spin-viewer";
+import { Product3D, type Feature3D } from "@/components/product-3d";
 import { storePolicy } from "@/lib/business";
 import { getDatabase } from "@/lib/mongodb";
 import { availableStock } from "@/lib/orders";
@@ -19,10 +18,8 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-const manifest = gallery as SpinManifest;
-
-const hotspots: SpinHotspot[] = [
-  { id: "button", title: "One-button control", text: "One press starts capture and one press ends it, so the moment recording begins is never in doubt. The button glows amber when Aira is ready to go." },
+const hotspots: Feature3D[] = [
+  { id: "button", title: "One-button control", text: "One press starts capture and one press ends it, so the moment recording begins is never in doubt. The button glows amber when Aira is ready to go. Try it: click the button on the model." },
   { id: "usb", title: "USB-C charging", text: "Charges with any standard USB-C cable and phone charger. The cable and charger are not included in the box." },
   { id: "pinhole", title: "Charging indicator", text: "A small indicator on the top shows the charging status." },
   { id: "slot", title: "Badge-holder slot", text: "Thread a badge holder or lanyard through the slot at the end so the recorder stays with you between consultations." },
@@ -62,7 +59,7 @@ export default async function BuyPage() {
     <main id="main-content" className="buy-main">
       <section className="section-tight buy-hero">
         <div className="container buy-hero-grid">
-          <SpinViewer manifest={manifest} hotspots={hotspots} label={`${product.name}, shown in 360 degrees`} />
+          <Product3D features={hotspots} label={product.name} />
 
           <div className="buy-summary">
             <p className="eyebrow">Buy Aira</p>

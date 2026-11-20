@@ -21,16 +21,16 @@ export default function ProductPage() {
         <div className="container">
           <div className="product-photo-grid">
             {[
-              ["/images/product/aira-00-desk-lit.webp", "The Aira recorder with its button glowing amber"],
-              ["/images/product/aira-02-front-usb-c.webp", "The Aira recorder showing the USB-C port on its long side"],
-              ["/images/product/aira-06-end-badge-slot.webp", "The Aira recorder end view showing the badge-holder slot"],
+              ["/images/product/aira-10-top-real.webp", "The Aira recorder from above, with its single button and charging indicator"],
+              ["/images/product/aira-11-usb-c-real.webp", "The Aira recorder side view showing the USB-C port in its recess"],
+              ["/images/product/aira-12-underside-real.webp", "The textured underside of the Aira recorder"],
             ].map(([src, alt], index) => (
               <div className="photo-frame" key={src}>
                 <Image src={src} alt={alt} fill priority={index === 0} sizes="(max-width: 980px) 100vw, 33vw" />
               </div>
             ))}
           </div>
-          <p className="photo-caption">Real product photos. Backgrounds edited or added.</p>
+          <p className="photo-caption">Real product photos. Studio backdrop extended to fit.</p>
         </div>
       </section>
       <section className="section-tight">

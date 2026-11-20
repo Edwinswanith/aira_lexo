@@ -2770,3 +2770,31 @@ button[aria-busy="true"] {
   color: var(--violet);
   font-weight: 750;
 }
+
+.product-3d-stage {
+  background: radial-gradient(120% 90% at 50% 35%, #fbfaf6 0%, #eeebe4 60%, #e4e0d7 100%);
+}
+.product-3d-canvas {
+  position: absolute;
+  inset: 0;
+}
+.product-3d-canvas canvas {
+  display: block;
+}
+.product-3d-tip {
+  position: absolute;
+  left: 50%;
+  bottom: 64px;
+  transform: translateX(-50%);
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(8, 21, 36, 0.82);
+  color: #fff;
+  font-size: 13px;
+  pointer-events: none;
+  animation: product-3d-tip-in 180ms ease-out;
+}
+@keyframes product-3d-tip-in {
+  from { opacity: 0; transform: translate(-50%, 6px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
