@@ -2,14 +2,16 @@ import { z } from "zod";
 
 /**
  * The single product sold on airalexo.in. Prices are in paise and include GST.
- * PLACEHOLDER: the price and box contents are dummy values for building and
- * testing. Replace them with the real details before launch.
+ * Price: Rs 9,999 before tax + 18% GST = Rs 11,798.82, sold at Rs 11,799.
+ * PLACEHOLDER: the box contents are still dummy values. Replace before launch.
  */
 export const product = {
   sku: "aira-recorder",
   name: "Aira consultation recorder",
   shortDescription: "A compact, one-button consultation recorder that you control, with access to the Aira review app.",
-  unitPricePaise: 999_900,
+  /** Price before GST, shown to buyers as "Rs 9,999 + 18% GST". */
+  basePricePaise: 999_900,
+  unitPricePaise: 1_179_900,
   gstRatePercent: 18,
   maxQuantityPerOrder: 5,
   imagePath: "/images/product/aira-00-desk-lit.webp",

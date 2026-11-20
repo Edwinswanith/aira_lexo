@@ -70,7 +70,7 @@ export default async function BuyPage() {
             <p className="lead">{product.shortDescription}</p>
             <div className="buy-price">
               <strong>{formatRupees(product.unitPricePaise)}</strong>
-              <span>Inclusive of GST. Free delivery across India.</span>
+              <span>Inclusive of GST: {formatRupees(product.basePricePaise)} + {product.gstRatePercent}% GST. Free delivery across India.</span>
             </div>
             <p className={`buy-stock${soldOut ? " is-out" : ""}`}>
               {soldOut ? "Sold out. Contact us to be told when it is back." : stock !== null && stock <= 5 ? `In stock: only ${stock} left` : "In stock. Ships in 2 to 3 working days."}
@@ -82,7 +82,7 @@ export default async function BuyPage() {
               <li><ArrowCounterClockwise size={20} aria-hidden="true" />{storePolicy.returnWindowDays} day returns. {storePolicy.warrantyMonths} month warranty</li>
               <li><CheckCircle size={20} aria-hidden="true" />GST invoice available for clinics</li>
             </ul>
-            <p className="muted buy-placeholder-note">Price and box contents shown here are placeholders until launch.</p>
+            <p className="muted buy-placeholder-note">Box contents shown here are placeholders until launch.</p>
           </div>
         </div>
       </section>
