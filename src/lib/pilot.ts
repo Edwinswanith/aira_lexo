@@ -4,19 +4,19 @@ import { z } from "zod";
 export const supportedCities = ["chennai", "bengaluru", "hyderabad", "mumbai", "coimbatore"] as const;
 
 export const pilotApplicationSchema = z.object({
-  fullName: z.string().trim().min(2, "Enter your full name").max(100),
-  email: z.string().trim().email("Enter a valid email address").max(180).transform((value) => value.toLowerCase()),
-  phone: z.string().trim().max(24).optional().or(z.literal("")),
-  role: z.enum(["doctor", "clinic_owner", "hospital_admin", "other"]),
-  specialty: z.string().trim().min(2, "Enter your specialty or area of work").max(100),
+  fullName: z.string({ error: "Please enter your full name" }).trim().min(2, "Please enter your full name").max(100, "Please keep your name under 100 characters"),
+  email: z.string({ error: "Please enter your email" }).trim().email("Please enter a valid email, like name@clinic.com").max(180).transform((value) => value.toLowerCase()),
+  phone: z.string().trim().max(24, "Please enter a shorter phone number").optional().or(z.literal("")),
+  role: z.enum(["doctor", "clinic_owner", "hospital_admin", "other"], { error: "Please choose your role" }),
+  specialty: z.string({ error: "Please enter your specialty, for example General medicine" }).trim().min(2, "Please enter your specialty, for example General medicine").max(100),
   organization: z.string().trim().max(160).optional().or(z.literal("")),
-  city: z.enum([...supportedCities, "other"]),
+  city: z.enum([...supportedCities, "other"], { error: "Please choose your city" }),
   otherCity: z.string().trim().max(100).optional().or(z.literal("")),
-  dailyPatientVolume: z.enum(["under_20", "20_40", "41_60", "over_60"]),
-  documentationMethod: z.enum(["paper", "emr", "dictation", "mixed", "other"]),
-  repeatVisitShare: z.enum(["under_25", "25_50", "over_50", "unsure"]),
+  dailyPatientVolume: z.enum(["under_20", "20_40", "41_60", "over_60"], { error: "Please choose how many patients you see a day" }),
+  documentationMethod: z.enum(["paper", "emr", "dictation", "mixed", "other"], { error: "Please choose how you keep notes today" }),
+  repeatVisitShare: z.enum(["under_25", "25_50", "over_50", "unsure"], { error: "Please choose a range, or Not sure" }),
   pilotInterest: z.string().trim().max(600, "Keep your answer within 600 characters").optional().or(z.literal("")),
-  consentToContact: z.literal(true, { error: "Please confirm that we may contact you" }),
+  consentToContact: z.literal(true, { error: "Please tick this box so we can contact you" }),
   privacyPolicyVersion: z.string().trim().min(1).max(30),
   source: z.string().trim().max(100).optional().or(z.literal("")),
   utmSource: z.string().trim().max(100).optional().or(z.literal("")),
@@ -25,7 +25,7 @@ export const pilotApplicationSchema = z.object({
   website: z.string().max(0).optional().or(z.literal("")),
 }).superRefine((value, context) => {
   if (value.city === "other" && !value.otherCity) {
-    context.addIssue({ code: "custom", path: ["otherCity"], message: "Enter your city" });
+    context.addIssue({ code: "custom", path: ["otherCity"], message: "Please enter your city" });
   }
 });
 

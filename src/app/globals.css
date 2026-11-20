@@ -1199,11 +1199,13 @@ h3 {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 22px 18px;
+  align-items: start;
 }
 
 .field {
   display: grid;
   gap: 8px;
+  align-content: start;
 }
 
 .field.full {
@@ -1235,7 +1237,12 @@ h3 {
 
 .field-error {
   color: #ae2626;
-  font-size: 12px;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.form-status.near-submit {
+  margin: 0 0 4px;
 }
 
 .checkbox-row {
@@ -1245,9 +1252,12 @@ h3 {
 }
 
 .checkbox-row input {
+  flex: none;
   width: 20px;
   height: 20px;
-  margin-top: 3px;
+  min-height: 0;
+  padding: 0;
+  margin-top: 1px;
 }
 
 .form-status {
