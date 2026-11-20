@@ -43,7 +43,7 @@ export const site = {
   organizationId: `${siteUrl}/#organization`,
   websiteId: `${siteUrl}/#website`,
   logoUrl: `${siteUrl}/images/aira-logo-mark.png`,
-  socialImageUrl: `${siteUrl}/images/og-aira.jpg`,
+  socialImageUrl: `${siteUrl}/images/og-aira-desk.jpg`,
   pilotCities: ["Chennai", "Bengaluru", "Hyderabad", "Mumbai", "Coimbatore"],
   topics: [
     "consultation memory",

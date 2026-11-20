@@ -21,7 +21,7 @@ export default function ProductPage() {
         <div className="container">
           <div className="product-photo-grid">
             {[
-              ["/images/product/aira-00-hero-lit-three-quarter.webp", "The Aira recorder with its button glowing amber"],
+              ["/images/product/aira-00-desk-lit.webp", "The Aira recorder with its button glowing amber"],
               ["/images/product/aira-02-front-usb-c.webp", "The Aira recorder showing the USB-C port on its long side"],
               ["/images/product/aira-06-end-badge-slot.webp", "The Aira recorder end view showing the badge-holder slot"],
             ].map(([src, alt], index) => (
@@ -30,7 +30,7 @@ export default function ProductPage() {
               </div>
             ))}
           </div>
-          <p className="photo-caption">Real product photos. Background edited.</p>
+          <p className="photo-caption">Real product photos. Backgrounds edited or added.</p>
         </div>
       </section>
       <section className="section-tight">

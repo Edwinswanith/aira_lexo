@@ -221,7 +221,7 @@ export function CheckoutForm({ product, states, paymentsReady, initialQuantity =
         <div className="checkout-product">
           <div className="checkout-image">
             <Image src={product.imagePath} alt={product.imageAlt} fill sizes="(max-width: 980px) 100vw, 420px" />
-            <span className="concept-label">Real product photo. Background edited.</span>
+            <span className="concept-label">Real product photo. Background added.</span>
           </div>
           <div>
             <h2 className="checkout-product-name">{product.name}</h2>

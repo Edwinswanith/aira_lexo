@@ -12,7 +12,7 @@ export const product = {
   unitPricePaise: 999_900,
   gstRatePercent: 18,
   maxQuantityPerOrder: 5,
-  imagePath: "/images/product/aira-00-hero-lit-three-quarter.webp",
+  imagePath: "/images/product/aira-00-desk-lit.webp",
   imageAlt: "Aira recorder with its button lit amber",
   inTheBox: ["Aira recorder", "USB-C charging cable", "Onboarding call with our team", "12 months of Aira review app access"],
 } as const;

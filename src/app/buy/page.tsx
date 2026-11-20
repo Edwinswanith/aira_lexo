@@ -90,12 +90,12 @@ export default async function BuyPage() {
       <section className="section-tight">
         <div className="container">
           <figure className="buy-lifestyle">
-            <Image src="/images/product/aira-ai-desk.webp" alt="AI-generated image of the Aira recorder on a consultation desk, its button glowing amber" fill sizes="(max-width: 1240px) 100vw, 1240px" />
+            <Image src="/images/product/aira-coat-pocket-wide.webp" alt="The Aira recorder tucked into the breast pocket of a doctor's white coat" fill sizes="(max-width: 1240px) 100vw, 1240px" />
             <figcaption>
-              <p className="eyebrow">At the consultation desk</p>
-              <strong>Ready before the patient sits down.</strong>
+              <p className="eyebrow">Always with you</p>
+              <strong>Slips into a coat pocket between consultations.</strong>
             </figcaption>
-            <span className="concept-label">AI-generated image</span>
+            <span className="concept-label">Real product photo. Scene added.</span>
           </figure>
         </div>
       </section>
