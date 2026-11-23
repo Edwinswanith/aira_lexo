@@ -143,9 +143,9 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="section">
+      <section className="section-tight">
         <div className="container">
-          <div className="section-heading">
+          <div className="section-heading is-solo">
             <p className="eyebrow">The ready light</p>
             <h2>Quiet in the room. Clear when it matters.</h2>
             <p className="lead">A single button glows amber when Aira is ready. One press starts capture after the patient agrees, and one press ends it, so the moment recording begins is never in doubt.</p>
@@ -189,7 +189,7 @@ export default function Home() {
 
       <section className="section-tight">
         <div className="container">
-          <div className="section-heading">
+          <div className="section-heading is-solo">
             <p className="eyebrow">Device and review app</p>
             <h2>Made to support attention, not compete for it.</h2>
             <p className="lead">The dedicated recorder offers one-button operation, visible status, and local storage. The secure review app is where the doctor examines the structured draft and approves what can be reused.</p>

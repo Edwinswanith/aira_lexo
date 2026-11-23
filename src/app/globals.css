@@ -476,6 +476,11 @@ h3 {
   margin-bottom: 54px;
 }
 
+/* A heading block with nothing after it: no trailing gap. */
+.section-heading.is-solo {
+  margin-bottom: 0;
+}
+
 .card-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
