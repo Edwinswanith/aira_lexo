@@ -210,13 +210,13 @@ describe("orders", () => {
     const db = freshDb();
     const order = await placeOrder(db);
     await markOrderPaid(db, payment());
-    const outcome = await recordRefund(db, { paymentId: "pay_test_1" }, { id: "rfnd_3", amountPaise: 100_000 }, "razorpay dashboard");
+    const outcome = await recordRefund(db, { paymentId: "pay_test_1" }, { id: "rfnd_3", amountPaise: Math.floor(order.amount_paise / 2) }, "razorpay dashboard");
     expect(outcome.kind).toBe("partial");
     if (outcome.kind === "partial") {
       expect(outcome.order.status).toBe("paid");
       expect(outcome.order.needs_attention).toContain("Partial refund");
     }
-    const repeat = await recordRefund(db, { paymentId: "pay_test_1" }, { id: "rfnd_3", amountPaise: 100_000 }, "razorpay dashboard");
+    const repeat = await recordRefund(db, { paymentId: "pay_test_1" }, { id: "rfnd_3", amountPaise: Math.floor(order.amount_paise / 2) }, "razorpay dashboard");
     expect(repeat.kind).toBe("partial");
     if (repeat.kind === "partial") expect(repeat.order.events.filter((event) => event.type === "partial_refund")).toHaveLength(1);
     expect(order.order_number).toBeTruthy();
