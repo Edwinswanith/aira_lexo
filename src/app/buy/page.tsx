@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CheckCircle, ShieldCheck, Truck, ArrowCounterClockwise } from "@phosphor-icons/react/dist/ssr";
@@ -80,19 +79,6 @@ export default async function BuyPage() {
               <li><CheckCircle size={20} aria-hidden="true" />GST invoice available for clinics</li>
             </ul>
           </div>
-        </div>
-      </section>
-
-      <section className="section-tight">
-        <div className="container">
-          <figure className="buy-lifestyle">
-            <Image src="/images/product/aira-coat-pocket-wide.webp" alt="The Aira recorder tucked into the breast pocket of a doctor's white coat" fill sizes="(max-width: 1240px) 100vw, 1240px" />
-            <figcaption>
-              <p className="eyebrow">Always with you</p>
-              <strong>Slips into a coat pocket between consultations.</strong>
-            </figcaption>
-            <span className="concept-label">Real product photo. Scene added.</span>
-          </figure>
         </div>
       </section>
 
