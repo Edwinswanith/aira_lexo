@@ -151,7 +151,8 @@ export default function Home() {
             <p className="lead">A single button glows amber when Aira is ready. One press starts capture after the patient agrees, and one press ends it, so the moment recording begins is never in doubt.</p>
           </div>
           <div className="photo-frame">
-            <Image src="/images/product/aira-ai-desk-natural-a.webp" alt="The Aira recorder on a consultation desk with its button glowing amber" fill sizes="(max-width: 980px) 100vw, 50vw" />
+            <Image src="/images/product/aira-14-ready-light-real.webp" alt="The Aira recorder with its single button glowing amber, showing the USB-C port" fill sizes="(max-width: 980px) 100vw, 50vw" />
+            <span className="concept-label">Real product photo. Background edited.</span>
           </div>
         </div>
       </section>
