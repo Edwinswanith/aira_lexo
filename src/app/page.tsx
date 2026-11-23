@@ -143,15 +143,12 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="section">
-        <div className="container split">
-          <div>
+      <section className="section-tight">
+        <div className="container">
+          <div className="section-heading is-solo">
             <p className="eyebrow">The ready light</p>
             <h2>Quiet in the room. Clear when it matters.</h2>
             <p className="lead">A single button glows amber when Aira is ready. One press starts capture after the patient agrees, and one press ends it, so the moment recording begins is never in doubt.</p>
-          </div>
-          <div className="photo-frame">
-            <Image src="/images/product/aira-ai-desk-natural-a.webp" alt="The Aira recorder on a consultation desk with its button glowing amber" fill sizes="(max-width: 980px) 100vw, 50vw" />
           </div>
         </div>
       </section>
@@ -191,18 +188,14 @@ export default function Home() {
       </section>
 
       <section className="section-tight">
-        <div className="container split">
-          <div>
+        <div className="container">
+          <div className="section-heading is-solo">
             <p className="eyebrow">Device and review app</p>
             <h2>Made to support attention, not compete for it.</h2>
             <p className="lead">The dedicated recorder offers one-button operation, visible status, and local storage. The secure review app is where the doctor examines the structured draft and approves what can be reused.</p>
             <div className="button-row">
               <Link className="button button-secondary" href="/product">Explore the product</Link>
-              <Link className="button button-secondary" href="/product#working-prototype">See the working prototype</Link>
             </div>
-          </div>
-          <div className="lifestyle-image">
-            <Image src="/images/consultation-desk.png" alt="Warm editorial still life with a notebook, pen, and ceramic cup" fill sizes="(max-width: 980px) 100vw, 55vw" />
           </div>
         </div>
       </section>

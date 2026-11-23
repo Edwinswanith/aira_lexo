@@ -14,8 +14,8 @@ export const product = {
   unitPricePaise: 1_179_900,
   gstRatePercent: 18,
   maxQuantityPerOrder: 5,
-  imagePath: "/images/product/aira-00-desk-lit.webp",
-  imageAlt: "Aira recorder with its button lit amber",
+  imagePath: "/images/product/aira-checkout-desk-natural.webp",
+  imageAlt: "The Aira recorder on a consultation desk with its button glowing amber",
   inTheBox: ["Aira recorder", "Badge holder", "Quick-start card"],
   /** Services that come with the purchase (confirmed by the owner, 2026-11-20). */
   alsoIncluded: ["6 months of the Aira review app, free", "A setup call with our team"],
