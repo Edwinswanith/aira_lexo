@@ -31,6 +31,7 @@ export function Footer() {
             <Link href="/pilot">Join the Pilot</Link>
             <Link href="/contact">Contact</Link>
             <Link href="/privacy-policy">Privacy Policy</Link>
+            <Link href="/mediscript/privacy-policy">MediScript CRM Privacy Policy</Link>
             <Link href="/terms-of-service">Terms</Link>
             <Link href="/data-deletion">Data Deletion</Link>
             <Link href="/refund-policy">Refund Policy</Link>

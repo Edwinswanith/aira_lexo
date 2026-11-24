@@ -33,5 +33,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     changeFrequency: "monthly" as const,
     priority: 0.65,
   }));
-  return [...pages, ...insights];
+  return [
+    ...pages,
+    { url: absoluteUrl("/mediscript/privacy-policy"), changeFrequency: "yearly", priority: 0.3 },
+    ...insights,
+  ];
 }

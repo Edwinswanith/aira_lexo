@@ -3,21 +3,23 @@ import { expect, test } from "@playwright/test";
 test.use({ javaScriptEnabled: false });
 
 const legalPages = [
+  { path: "/mediscript/privacy-policy", title: "MediScript CRM Privacy Policy", content: "AiraLexo MediScript", date: "24 November 2026" },
   { path: "/privacy-policy", title: "Privacy Policy", content: "1777002823517781" },
   { path: "/terms-of-service", title: "Terms of Service", content: "AiraLexo Solutions Private Limited" },
   { path: "/data-deletion", title: "Request data deletion", content: "Data deletion request" },
 ];
 
-for (const { path, title, content } of legalPages) {
+for (const { path, title, content, date = "6 November 2026" } of legalPages) {
   test(`${path} serves readable public HTML without JavaScript`, async ({ page, request }) => {
     const raw = await request.get(path, { headers: { "User-Agent": "facebookexternalhit/1.1" } });
     expect(raw.status()).toBe(200);
     expect(raw.headers()["content-type"]).toContain("text/html");
+    expect(raw.headers()["x-robots-tag"] ?? "").not.toMatch(/noindex|nofollow/i);
     expect(await raw.text()).toContain(content);
     const response = await page.goto(path, { waitUntil: "domcontentloaded" });
     expect(response?.status()).toBe(200);
     await expect(page.getByRole("heading", { level: 1, name: title, exact: true })).toBeVisible();
-    await expect(page.locator("main")).toContainText("6 November 2026");
+    await expect(page.locator("main")).toContainText(date);
     await expect(page.locator("main a[href^='mailto:edwin@airalexo.in']").first()).toBeVisible();
     await expect(page.locator("link[rel='canonical']")).toHaveAttribute("href", `https://airalexo.in${path}`);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
