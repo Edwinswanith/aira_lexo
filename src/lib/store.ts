@@ -10,8 +10,9 @@ export const product = {
   name: "Aira consultation recorder",
   shortDescription: "A compact, one-button consultation recorder that you control, with 6 months of the Aira review app free.",
   /** Price before GST, shown to buyers as "Rs 9,999 + 18% GST". */
-  basePricePaise: 999_900,
-  unitPricePaise: 1_179_900,
+  // TEMPORARY Rs 1 live payment test. Restore to 999_900 and 1_179_900 straight after the test.
+  basePricePaise: 85,
+  unitPricePaise: 100,
   gstRatePercent: 18,
   maxQuantityPerOrder: 5,
   imagePath: "/images/product/aira-checkout-desk-natural.webp",
